@@ -1,4 +1,4 @@
-package cl.arpis.correo;
+package cl.arpis.correo.config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @PropertySources({@PropertySource("classpath:db-dev.properties")})
 @Profile("levis")
-@EnableJpaRepositories(entityManagerFactoryRef = "oracleEntityManagerFactory", transactionManagerRef = "oracleTransacctionManager", basePackages = "cl.arpis.correo.repository.oracle")
+@EnableJpaRepositories(entityManagerFactoryRef = "oracleEntityManagerFactory", transactionManagerRef = "oracleTransacctionManager", basePackages = "cl.arpis.correo.repositories")
 public class LevisConfig {
 	
 	@Autowired
