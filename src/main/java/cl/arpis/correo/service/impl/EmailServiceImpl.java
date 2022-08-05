@@ -34,16 +34,18 @@ public class EmailServiceImpl implements IEmailService {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		mailSender.setUsername(emisor.getMail());
 		mailSender.setPassword(emisor.getPass());
-		mailSender.setHost("smtp.gmail.com");
-		mailSender.setPort(578);
+		//mailSender.setHost("smtp.gmail.com");
+		//mailSender.setPort(578);
 
 		Properties props = mailSender.getJavaMailProperties();
-		props.put("mail.transport.protocol", "smtp");
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.debug", "true");
-//		props.put("mail.host", "mtp.gmail.com");
-//		props.put("mail.port", "587");
+			props.put("mail.smtp.host", "smtp.gmail.com");
+			props.put("mail.smtp.post", "587");
+			props.put("mail.smtp.auth", true);
+			props.put("mail.smtp.starttls.enable", true);
+			props.put("mail.smtp.ssl.protocols", "TLSv1.2");	     
+			props.put("mail.transport.protocol", "smtp");
+			props.put("mail.smtp.ssl.enable", true);
+			props.put("mail.debug", true);
 
 //		contCorre.getListaCorreo().stream().filter(a -> a.getResponsable().equals("TO"));
 //		contCorre.getListaCorreo().stream().filter(a -> a.getResponsable().equals("CC"));
