@@ -1,9 +1,16 @@
 package cl.arpis.correo.controller.handler;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+import javax.validation.UnexpectedTypeException;
+
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.mail.MailException;
 import org.springframework.transaction.CannotCreateTransactionException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,7 +33,7 @@ public class ManejoErrores {
 		return ResponseEntity.badRequest()
 				.body(RespuestaErrorDTO.builder()
 						.error("Problemas procesando correo")
-						.detalles(ex.getMessage())
+						.detalles(Arrays.asList(ex.getMessage()))
 						.build());
 	}
 
@@ -41,7 +48,7 @@ public class ManejoErrores {
 		return ResponseEntity.internalServerError()
 				.body(RespuestaErrorDTO.builder()
 						.error("Error interno")
-						.detalles("Contacte soporte técnico")
+						.detalles(Arrays.asList("Contacte soporte técnico"))
 						.build());
 	}
 
@@ -52,7 +59,7 @@ public class ManejoErrores {
 		return ResponseEntity.internalServerError()
 				.body(RespuestaErrorDTO.builder()
 						.error("Problemas con SMTP")
-						.detalles(ex.getMessage())
+						.detalles(Arrays.asList(ex.getMessage()))
 						.build());
 	}
 
@@ -63,7 +70,44 @@ public class ManejoErrores {
 		return ResponseEntity.internalServerError()
 				.body(RespuestaErrorDTO.builder()
 						.error("Error interno")
-						.detalles("Contacte soporte técnico")
+						.detalles(Arrays.asList("Contacte soporte técnico"))
+						.build());
+	}
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ResponseBody
+	private ResponseEntity<RespuestaErrorDTO> manejoError(MethodArgumentNotValidException ex) {
+		return ResponseEntity.badRequest()
+				.body(RespuestaErrorDTO.builder()
+						.error("Error de datos")
+						.detalles(ex.getFieldErrors().stream()
+								.map(fe -> String.format("Campo '%s' %s", fe.getField(), fe.getDefaultMessage()))
+								.collect(Collectors.toList()))
+						.build());
+	}	
+
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	@ResponseBody
+	private ResponseEntity<RespuestaErrorDTO> manejoError(HttpMessageNotReadableException ex) {
+		return ResponseEntity.badRequest()
+				.body(RespuestaErrorDTO.builder()
+						.error("Error de datos")
+						.detalles(Arrays.asList(ex.getMostSpecificCause().fillInStackTrace().getLocalizedMessage().split("\\n")[0]))
+						.build());
+	}
+
+	/* ==================================================
+	 * Errores javax validations
+	 * ================================================== */
+
+	@ExceptionHandler(UnexpectedTypeException.class)
+	@ResponseBody
+	private ResponseEntity<RespuestaErrorDTO> manejoError(UnexpectedTypeException ex) {
+		final String[] splited = ex.getMessage().split("\\.");
+		return ResponseEntity.badRequest()
+				.body(RespuestaErrorDTO.builder()
+						.error("Error de datos")
+						.detalles(Arrays.asList(splited[splited.length - 1].trim()))
 						.build());
 	}
 
@@ -78,7 +122,7 @@ public class ManejoErrores {
 		return ResponseEntity.internalServerError()
 				.body(RespuestaErrorDTO.builder()
 						.error("Error interno")
-						.detalles("Contacte soporte técnico")
+						.detalles(Arrays.asList("Contacte soporte técnico"))
 						.build());
 	}
 
@@ -89,7 +133,7 @@ public class ManejoErrores {
 		return ResponseEntity.internalServerError()
 				.body(RespuestaErrorDTO.builder()
 						.error("Error interno")
-						.detalles("Contacte soporte técnico")
+						.detalles(Arrays.asList("Contacte soporte técnico"))
 						.build());
 	}
 

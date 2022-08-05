@@ -1,5 +1,7 @@
 package cl.arpis.correo.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,23 +27,29 @@ public class CorreoController {
 		this.serviceCorreo = serviceCorreo;
 	}
 
-	@PostMapping(path = "/envio", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<RespuestaDto> enviarCorreo(@RequestBody MensajeDto correo,
+	@PostMapping(path = "/envio",
+			produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<RespuestaDto> enviarCorreo(
+			@RequestBody @Valid MensajeDto correo,
 			@RequestHeader(name = "Authorization", required = true) String usuario) {
 		RespuestaDto resp = serviceCorreo.enviarCorreo(correo);
 		return ResponseEntity.ok(resp);
 	}
 
-	@GetMapping("/proyecto/{id}/error/{error}")
-	public ResponseEntity<ContenedorCorreoDto> listarCorreos(@PathVariable("id") long idProyecto,
+	@GetMapping(path = "/proyecto/{id}/error/{error}",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ContenedorCorreoDto> listarCorreos(
+			@PathVariable("id") long idProyecto,
 			@PathVariable("error") String error,
 			@RequestHeader(name = "Authorization", required = true) String usuario) {
 		ContenedorCorreoDto resp = serviceCorreo.buscarCorreos(idProyecto, error);
 		return ResponseEntity.ok(resp);
 	}
 
-	@GetMapping("/proyecto/{id}")
-	public ResponseEntity<ContenedorCorreoDto> listarCorreos(@PathVariable("id") long idProyecto,
+	@GetMapping(path = "/proyecto/{id}",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ContenedorCorreoDto> listarCorreos(
+			@PathVariable("id") long idProyecto,
 			@RequestHeader(name = "Authorization", required = true) String usuario) {
 		ContenedorCorreoDto resp = serviceCorreo.buscarCorreos(idProyecto);
 		return ResponseEntity.ok(resp);
