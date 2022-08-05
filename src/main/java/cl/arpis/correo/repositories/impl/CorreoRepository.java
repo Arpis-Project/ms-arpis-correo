@@ -7,12 +7,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import cl.arpis.correo.config.QueriesConfig;
 import cl.arpis.correo.entities.CorreoEntity;
 import cl.arpis.correo.repositories.ICorreoRepository;
 
 @Repository
+@Transactional
 @SuppressWarnings("unchecked")
 public class CorreoRepository implements ICorreoRepository {
 
@@ -28,11 +30,13 @@ public class CorreoRepository implements ICorreoRepository {
 	public List<CorreoEntity> buscarCorreo(long idProyecto, String error) {
 		List<CorreoEntity> listCorreo = new ArrayList<>();
 		try {
-			listCorreo.addAll((List<CorreoEntity>) entiManager
-					.createNativeQuery(query.getQueryByName("listaCorreoError"), CorreoEntity.class)
-					.setParameter("ID_PROYECTO", idProyecto).setParameter("ID_TIPO_ERROR", error).getResultList());
+			listCorreo.addAll((List<CorreoEntity>) this.entiManager
+					.createNativeQuery(this.query.getQueryByName("listaCorreoError"), CorreoEntity.class)
+					.setParameter("ID_PROYECTO", idProyecto)
+					.setParameter("ID_TIPO_ERROR", error)
+					.getResultList());
 		} catch (NoResultException e) {
-		
+			// Todo OK
 		}
 		return listCorreo;
 	}
@@ -41,13 +45,14 @@ public class CorreoRepository implements ICorreoRepository {
 	public List<CorreoEntity> buscarCorreo(long idProyecto) {
 		List<CorreoEntity> listCorreo = new ArrayList<>();
 		try {
-			listCorreo.addAll((List<CorreoEntity>) entiManager
-					.createNativeQuery(query.getQueryByName("listaCorreo"), CorreoEntity.class)
+			listCorreo.addAll((List<CorreoEntity>)this. entiManager
+					.createNativeQuery(this.query.getQueryByName("listaCorreo"), CorreoEntity.class)
 					.setParameter("ID_PROYECTO", idProyecto)
 					.getResultList());
 		} catch (NoResultException e) {
-			// handle exception
+			// Todo OK
 		}
 		return listCorreo;
 	}
+
 }

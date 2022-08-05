@@ -23,6 +23,8 @@ public class ContenedorCorreoDto implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -2993733803645325855L;
+
 	@JsonProperty(value = "lista_correo")
 	private List<CorreoDto> listaCorreo;
+
 }

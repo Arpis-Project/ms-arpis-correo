@@ -15,14 +15,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class RespuestaDto implements Serializable {
-	/**
-	* 
-	*/
-	private static final long serialVersionUID = 9015908220110279855L;
+public class RespuestaErrorDTO implements Serializable {
 
-	
-	private String mensaje;
-	private ContenedorCorreoDto casillas;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4572552223121007584L;
+
+	private String error;
+	private String detalles;
 
 }

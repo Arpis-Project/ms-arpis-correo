@@ -1,6 +1,5 @@
 package cl.arpis.correo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +18,7 @@ import cl.arpis.correo.service.ICorreoService;
 @RestController
 @RequestMapping("/correo")
 public class CorreoController {
-	@Autowired
+
 	private ICorreoService serviceCorreo;
 
 	public CorreoController(ICorreoService serviceCorreo) {
@@ -47,4 +46,5 @@ public class CorreoController {
 		ContenedorCorreoDto resp = serviceCorreo.buscarCorreos(idProyecto);
 		return ResponseEntity.ok(resp);
 	}
+
 }
