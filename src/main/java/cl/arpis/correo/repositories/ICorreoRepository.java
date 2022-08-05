@@ -6,8 +6,8 @@ import cl.arpis.correo.entities.CorreoEntity;
 
 public interface ICorreoRepository {
 
-	List<CorreoEntity> buscarCorreo(int idProyecto, String error);
+	List<CorreoEntity> buscarCorreo(long idProyecto, String error);
 
-	List<CorreoEntity> buscarCorreo(int idProyecto);
+	List<CorreoEntity> buscarCorreo(long idProyecto);
 
 }

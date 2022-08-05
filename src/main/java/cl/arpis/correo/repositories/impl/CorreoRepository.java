@@ -25,22 +25,20 @@ public class CorreoRepository implements ICorreoRepository {
 	}
 
 	@Override
-	public List<CorreoEntity> buscarCorreo(int idProyecto, String error) {
+	public List<CorreoEntity> buscarCorreo(long idProyecto, String error) {
 		List<CorreoEntity> listCorreo = new ArrayList<>();
 		try {
 			listCorreo.addAll((List<CorreoEntity>) entiManager
 					.createNativeQuery(query.getQueryByName("listaCorreoError"), CorreoEntity.class)
-					.setParameter("ID_PROYECTO", idProyecto)
-					.setParameter("ID_TIPO_ERROR", error)
-					.getResultList());
+					.setParameter("ID_PROYECTO", idProyecto).setParameter("ID_TIPO_ERROR", error).getResultList());
 		} catch (NoResultException e) {
-			//handle exception
+		
 		}
 		return listCorreo;
 	}
 
 	@Override
-	public List<CorreoEntity> buscarCorreo(int idProyecto) {
+	public List<CorreoEntity> buscarCorreo(long idProyecto) {
 		List<CorreoEntity> listCorreo = new ArrayList<>();
 		try {
 			listCorreo.addAll((List<CorreoEntity>) entiManager
@@ -48,7 +46,7 @@ public class CorreoRepository implements ICorreoRepository {
 					.setParameter("ID_PROYECTO", idProyecto)
 					.getResultList());
 		} catch (NoResultException e) {
-			//handle exception
+			// handle exception
 		}
 		return listCorreo;
 	}

@@ -1,7 +1,6 @@
 package cl.arpis.correo.dto;
 
 import java.io.Serializable;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -17,19 +16,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class EnvioCorreoDto implements Serializable {
+public class CorreoDto implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6955170255384965705L;
-	@JsonProperty(value = "proyecto")
-	private Long proyecto;
-	@JsonProperty(value = "codigo_error")
-	private String codError;
-	@JsonProperty(value = "asusto")
-	private String asusto;
-	@JsonProperty(value = "mensaje")
-	private String mensaje;
-	@JsonProperty(value = "lista_casos")
-	private List<CasosDto> listaCasos;
+	private static final long serialVersionUID = -4114610840856447460L;
+	@JsonProperty(value = "tipo_envio")
+	private String responsable;
+	
+	@JsonProperty(value = "email")
+	private String mail;
+	
+	@JsonProperty(value = "pass")
+	private String pass;
 }
