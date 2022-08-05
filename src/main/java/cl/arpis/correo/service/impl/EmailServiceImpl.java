@@ -76,7 +76,6 @@ public class EmailServiceImpl implements IEmailService {
 		props.put("mail.smtp.auth", this.env.getProperty("arpis.mail.smtp.auth"));
 		props.put("mail.smtp.starttls.enable", this.env.getProperty("arpis.mail.smtp.starttls.enable"));
 		props.put("mail.smtp.ssl.protocols", this.env.getProperty("arpis.mail.smtp.ssl.protocols"));
-		props.put("mail.smtp.ssl.enable", this.env.getProperty("arpis.mail.smtp.ssl.enable"));
 		props.put("mail.debug", this.env.getProperty("arpis.mail.debug"));
 		props.put("mail.encoding", this.env.getProperty("arpis.mail.encoding"));
 		// Crear mensaje
@@ -88,7 +87,7 @@ public class EmailServiceImpl implements IEmailService {
 		sb.delete(0, sb.length());
 		receptoresCC.stream().map(r -> r.getMail().trim().concat(",")).forEach(sb::append);
 		emailMessage.setCc(sb.toString());
-		emailMessage.setSubject(correo.getAsusto());
+		emailMessage.setSubject(correo.getAsunto());
 		emailMessage.setText(String.format("%s\n%s", correo.getMensaje(), mensaje.getMensaje()));
 		// Enviar correo
 		mailSender.send(emailMessage);

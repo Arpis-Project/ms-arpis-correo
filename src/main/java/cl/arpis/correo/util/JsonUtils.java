@@ -3,8 +3,6 @@ package cl.arpis.correo.util;
 import java.io.Reader;
 import java.io.StringReader;
 
-import org.modelmapper.ModelMapper;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -17,7 +15,6 @@ import lombok.NoArgsConstructor;
 public class JsonUtils {
 
 	private final static ObjectMapper OBJECT_MAPPER;
-	
 
 	static {
 		OBJECT_MAPPER = new ObjectMapper();
@@ -31,7 +28,6 @@ public class JsonUtils {
 			return OBJECT_MAPPER.writeValueAsString(object);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
-			// throw new IntegracionesException("", e);
 		}
 	}
 
@@ -41,7 +37,6 @@ public class JsonUtils {
 			return OBJECT_MAPPER.readValue(reader, type);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
-			// throw new IntegracionesException("", e);
 		}
 	}
 }

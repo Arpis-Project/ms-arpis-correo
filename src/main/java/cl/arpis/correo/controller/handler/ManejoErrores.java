@@ -37,22 +37,23 @@ public class ManejoErrores {
 						.build());
 	}
 
+	@ExceptionHandler(MailException.class)
+	@ResponseBody
+	private ResponseEntity<RespuestaErrorDTO> manejoError(MailException ex) {
+		log.error("", ex);
+		return ResponseEntity.internalServerError()
+				.body(RespuestaErrorDTO.builder()
+						.error("Problemas con SMTP")
+						.detalles(ex.getMessage())
+						.build());
+	}
+
 	@ExceptionHandler(CorreoException.class)
 	@ResponseBody
 	private ResponseEntity<RespuestaErrorDTO> manejoError(CorreoException ex) {
 		return ResponseEntity.badRequest()
 				.body(RespuestaErrorDTO.builder()
 						.error("Problemas procesando correo")
-						.detalles(ex.getMessage())
-						.build());
-	}
-
-	@ExceptionHandler(MailException.class)
-	@ResponseBody
-	private ResponseEntity<RespuestaErrorDTO> manejoError(MailException ex) {
-		return ResponseEntity.badRequest()
-				.body(RespuestaErrorDTO.builder()
-						.error("Problemas con SMTP")
 						.detalles(ex.getMessage())
 						.build());
 	}
