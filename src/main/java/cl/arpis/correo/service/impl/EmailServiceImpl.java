@@ -34,14 +34,16 @@ public class EmailServiceImpl implements IEmailService {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		mailSender.setUsername(emisor.getMail());
 		mailSender.setPassword(emisor.getPass());
+		mailSender.setHost("smtp.gmail.com");
+		mailSender.setPort(578);
 
 		Properties props = mailSender.getJavaMailProperties();
-		props.put("spring.mail.transport.protocol", "smtp");
-		props.put("spring.mail.smtp.auth", "true");
-		props.put("spring.mail.smtp.starttls.enable", "true");
-		props.put("spring.mail.debug", "true");
-		props.put("spring.mail.host", "true");
-		props.put("spring.mail.port", "true");
+		props.put("mail.transport.protocol", "smtp");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.debug", "true");
+//		props.put("mail.host", "mtp.gmail.com");
+//		props.put("mail.port", "587");
 
 //		contCorre.getListaCorreo().stream().filter(a -> a.getResponsable().equals("TO"));
 //		contCorre.getListaCorreo().stream().filter(a -> a.getResponsable().equals("CC"));
