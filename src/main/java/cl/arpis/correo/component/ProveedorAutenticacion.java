@@ -7,10 +7,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.TransactionException;
 
-import cl.arpis.correo.service.IAutenticarUsuario;
 import cl.arpis.correo.entities.ApiUsuariosEntity;
-
+import cl.arpis.correo.service.IAutenticarUsuario;
 
 @Component("autenticacion")
 public class ProveedorAutenticacion implements AuthenticationProvider {
@@ -24,12 +24,15 @@ public class ProveedorAutenticacion implements AuthenticationProvider {
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		String pass = authentication.getCredentials().toString();
-		ApiUsuariosEntity usuario = autenticarUsuario.buscarUsuario(authentication.getName());
-		if (usuario.getPassword().equals(pass)) {
-			return new UsernamePasswordAuthenticationToken(usuario.getLogin(), pass, new ArrayList<>());
+		try {
+			ApiUsuariosEntity usuario = this.autenticarUsuario.buscarUsuario(authentication.getName());
+			if (usuario.getPassword().equals(pass)) {
+				return new UsernamePasswordAuthenticationToken(usuario.getLogin(), pass, new ArrayList<>());
+			}
+		} catch(TransactionException ex) {
+			throw new RuntimeException("Problemas con la autenticación accediendo a la DB", ex);
 		}
 		return null;
-
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package cl.arpis.correo.controller.handler;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
+import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,16 +16,23 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ManejoErrores {
 
-	@ExceptionHandler(RuntimeException.class)
+	/* ==================================================
+	 * Errores aplicacion
+	 * ================================================== */
+
+	@ExceptionHandler(CorreoException.class)
 	@ResponseBody
-	private ResponseEntity<RespuestaErrorDTO> manejoError(RuntimeException ex) {
-		log.error("", ex);
-		return ResponseEntity.internalServerError()
+	private ResponseEntity<RespuestaErrorDTO> manejoError(CorreoException ex) {
+		return ResponseEntity.badRequest()
 				.body(RespuestaErrorDTO.builder()
-						.error("Error interno")
-						.detalles("Contacte soporte técnico")
+						.error("Problemas procesando correo")
+						.detalles(ex.getMessage())
 						.build());
 	}
+
+	/* ==================================================
+	 * Errores Spring
+	 * ================================================== */
 
 	@ExceptionHandler(DataAccessException.class)
 	@ResponseBody
@@ -48,13 +56,40 @@ public class ManejoErrores {
 						.build());
 	}
 
-	@ExceptionHandler(CorreoException.class)
+	@ExceptionHandler(CannotCreateTransactionException.class)
 	@ResponseBody
-	private ResponseEntity<RespuestaErrorDTO> manejoError(CorreoException ex) {
-		return ResponseEntity.badRequest()
+	private ResponseEntity<RespuestaErrorDTO> manejoError(CannotCreateTransactionException ex) {
+		log.error("", ex);
+		return ResponseEntity.internalServerError()
 				.body(RespuestaErrorDTO.builder()
-						.error("Problemas procesando correo")
-						.detalles(ex.getMessage())
+						.error("Error interno")
+						.detalles("Contacte soporte técnico")
+						.build());
+	}
+
+	/* ==================================================
+	 * Errores genericos
+	 * ================================================== */
+
+	@ExceptionHandler(RuntimeException.class)
+	@ResponseBody
+	private ResponseEntity<RespuestaErrorDTO> manejoError(RuntimeException ex) {
+		log.error("", ex);
+		return ResponseEntity.internalServerError()
+				.body(RespuestaErrorDTO.builder()
+						.error("Error interno")
+						.detalles("Contacte soporte técnico")
+						.build());
+	}
+
+	@ExceptionHandler(Throwable.class)
+	@ResponseBody
+	private ResponseEntity<RespuestaErrorDTO> manejoError(Throwable ex) {
+		log.error("", ex);
+		return ResponseEntity.internalServerError()
+				.body(RespuestaErrorDTO.builder()
+						.error("Error interno")
+						.detalles("Contacte soporte técnico")
 						.build());
 	}
 
