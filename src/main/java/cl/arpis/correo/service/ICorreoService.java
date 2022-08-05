@@ -1,9 +1,6 @@
 package cl.arpis.correo.service;
 
-import java.util.List;
-
 import cl.arpis.correo.dto.ContenedorCorreoDto;
-import cl.arpis.correo.dto.CorreoDto;
 import cl.arpis.correo.dto.MensajeDto;
 import cl.arpis.correo.dto.RespuestaDto;
 

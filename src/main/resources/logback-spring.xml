@@ -1,135 +1,44 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
 
-	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
-	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+	<include
+		resource="org/springframework/boot/logging/logback/defaults.xml" />
+	<include
+		resource="org/springframework/boot/logging/logback/console-appender.xml" />
 
-	<property name="LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%5p] ${hostName} --- [%15.15t] %-50.50c{1} : %m%n%ex"/>
-	<property name="LOG_PATTERN_PROCESS" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%5p] %-35.35c{1} : %m%n%ex"/>
+	<property name="LOG_PATTERN"
+		value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%5p] ${hostName} --- [%15.15t] %-50.50c{1} : %m%n%ex" />
 
-	<property name="PROCESO_VENTAS" value="ventas" />
-	<property name="PROCESO_PEDIDOS" value="pedidos" />
-	<property name="PROCESO_RECEPCIONES" value="recepciones" />
-	<property name="PROCESO_DIFERENCIAS" value="diferencias" />
-	<property name="PROCESO_AJUSTE_STOCK" value="ajuste-stock" />
-
-	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+	<appender name="Console"
+		class="ch.qos.logback.core.ConsoleAppender">
 		<layout class="ch.qos.logback.classic.PatternLayout">
 			<pattern>${LOG_PATTERN}</pattern>
 		</layout>
 	</appender>
 
-	<appender name="integraciones-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<appender name="File"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<encoder>
 			<pattern>${LOG_PATTERN}</pattern>
 		</encoder>
 		<prudent>true</prudent>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>
-				${INT_LOGS_PATH}/@project.artifactId@/@project.artifactId@-@project.version@_%d{yyyy-MM-dd}.log
+				${LOGS_PATH}/@project.artifactId@/@project.artifactId@-@project.version@-%d{yyyy-MM-dd}.log
 			</fileNamePattern>
-			<maxHistory>30</maxHistory>
+			<maxHistory>60</maxHistory>
 		</rollingPolicy>
 	</appender>
 
-	<appender name="${PROCESO_VENTAS}-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<encoder>
-			<pattern>${LOG_PATTERN_PROCESS}</pattern>
-		</encoder>
-		<prudent>true</prudent>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>
-				${INT_LOGS_PATH}/@project.artifactId@/${PROCESO_VENTAS}-@project.artifactId@-@project.version@_%d{yyyy-MM-dd}.log
-			</fileNamePattern>
-			<maxHistory>30</maxHistory>
-		</rollingPolicy>
-	</appender>
-
-	<appender name="${PROCESO_PEDIDOS}-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<encoder>
-			<pattern>${LOG_PATTERN_PROCESS}</pattern>
-		</encoder>
-		<prudent>true</prudent>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>
-				${INT_LOGS_PATH}/@project.artifactId@/${PROCESO_PEDIDOS}-@project.artifactId@-@project.version@_%d{yyyy-MM-dd}.log
-			</fileNamePattern>
-			<maxHistory>30</maxHistory>
-		</rollingPolicy>
-	</appender>
-
-	<appender name="${PROCESO_RECEPCIONES}-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<encoder>
-			<pattern>${LOG_PATTERN_PROCESS}</pattern>
-		</encoder>
-		<prudent>true</prudent>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>
-				${INT_LOGS_PATH}/@project.artifactId@/${PROCESO_RECEPCIONES}-@project.artifactId@-@project.version@_%d{yyyy-MM-dd}.log
-			</fileNamePattern>
-			<maxHistory>30</maxHistory>
-		</rollingPolicy>
-	</appender>
-
-	<appender name="${PROCESO_DIFERENCIAS}-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<encoder>
-			<pattern>${LOG_PATTERN_PROCESS}</pattern>
-		</encoder>
-		<prudent>true</prudent>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>
-				${INT_LOGS_PATH}/@project.artifactId@/${PROCESO_DIFERENCIAS}-@project.artifactId@-@project.version@_%d{yyyy-MM-dd}.log
-			</fileNamePattern>
-			<maxHistory>30</maxHistory>
-		</rollingPolicy>
-	</appender>
-
-	<appender name="${PROCESO_AJUSTE_STOCK}-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<encoder>
-			<pattern>${LOG_PATTERN_PROCESS}</pattern>
-		</encoder>
-		<prudent>true</prudent>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>
-				${INT_LOGS_PATH}/@project.artifactId@/${PROCESO_AJUSTE_STOCK}-@project.artifactId@-@project.version@_%d{yyyy-MM-dd}.log
-			</fileNamePattern>
-			<maxHistory>30</maxHistory>
-		</rollingPolicy>
-	</appender>
-
-	<logger name="cl.ap.lv.integraciones" level="${INT_LOGS_LEVEL}" additivity="false">
-		<appender-ref ref="console" />
-		<appender-ref ref="integraciones-file" />
-	</logger>
-
-	<logger name="integracion-${PROCESO_VENTAS}" level="${INT_LOGS_LEVEL}" additivity="false">
-		<appender-ref ref="console" />
-		<appender-ref ref="${PROCESO_VENTAS}-file" />
-	</logger>
-
-	<logger name="integracion-${PROCESO_PEDIDOS}" level="${INT_LOGS_LEVEL}" additivity="false">
-		<appender-ref ref="console" />
-		<appender-ref ref="${PROCESO_PEDIDOS}-file" />
-	</logger>
-
-	<logger name="integracion-${PROCESO_RECEPCIONES}" level="${INT_LOGS_LEVEL}" additivity="false">
-		<appender-ref ref="console" />
-		<appender-ref ref="${PROCESO_RECEPCIONES}-file" />
-	</logger>
-
-	<logger name="integracion-${PROCESO_DIFERENCIAS}" level="${INT_LOGS_LEVEL}" additivity="false">
-		<appender-ref ref="console" />
-		<appender-ref ref="${PROCESO_DIFERENCIAS}-file" />
-	</logger>
-
-	<logger name="integracion-${PROCESO_AJUSTE_STOCK}" level="${INT_LOGS_LEVEL}" additivity="false">
-		<appender-ref ref="console" />
-		<appender-ref ref="${PROCESO_AJUSTE_STOCK}-file" />
+	<logger name="cl.arpis" level="${LOGS_LEVEL}" additivity="false">
+		<appender-ref ref="Console" />
+		<appender-ref ref="File" />
 	</logger>
 
 	<root level="INFO" additivity="false">
-		<appender-ref ref="console" />
-		<appender-ref ref="integraciones-file" />
+		<appender-ref ref="Console" />
+		<appender-ref ref="File" />
 	</root>
 
 	<jmxConfigurator />

@@ -6,8 +6,8 @@ import cl.arpis.correo.dto.MensajeEmailDto;
 
 public interface IEmailService {
 
-	void enviarResultados(MensajeDto correo, ContenedorCorreoDto contCorre);
+	public void enviarResultados(MensajeDto correo, ContenedorCorreoDto contCorre);
 
-	void enviarEmail(MensajeDto correo, MensajeEmailDto mensaje, ContenedorCorreoDto contCorre);
+	public void enviarEmail(MensajeDto correo, MensajeEmailDto mensaje, ContenedorCorreoDto contCorre);
 
 }

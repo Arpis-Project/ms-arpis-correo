@@ -20,5 +20,7 @@ public class MensajeEmailDto implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 8523270701343218118L;
+
 	private String mensaje;
+
 }
