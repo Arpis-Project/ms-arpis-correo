@@ -11,8 +11,10 @@ import org.springframework.transaction.TransactionException;
 
 import cl.arpis.correo.entities.ApiUsuariosEntity;
 import cl.arpis.correo.service.IAutenticarUsuario;
+import lombok.extern.slf4j.Slf4j;
 
 @Component("autenticacion")
+@Slf4j
 public class ProveedorAutenticacion implements AuthenticationProvider {
 
 	private IAutenticarUsuario autenticarUsuario;
@@ -23,10 +25,12 @@ public class ProveedorAutenticacion implements AuthenticationProvider {
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+		log.info("Iniciando sesión");
 		String pass = authentication.getCredentials().toString();
 		try {
 			ApiUsuariosEntity usuario = this.autenticarUsuario.buscarUsuario(authentication.getName());
 			if (usuario.getPassword().equals(pass)) {
+				log.info("Sesión iniciada");
 				return new UsernamePasswordAuthenticationToken(usuario.getLogin(), pass, new ArrayList<>());
 			}
 		} catch(TransactionException ex) {
