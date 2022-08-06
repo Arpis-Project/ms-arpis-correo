@@ -18,7 +18,7 @@ import cl.arpis.correo.dto.RespuestaDto;
 import cl.arpis.correo.service.ICorreoService;
 
 @RestController
-@RequestMapping("/correo")
+@RequestMapping("/v1/correo")
 public class CorreoController {
 
 	private ICorreoService serviceCorreo;
