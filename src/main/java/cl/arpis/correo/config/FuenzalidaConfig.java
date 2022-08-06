@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@PropertySources({@PropertySource("classpath:db-dev.properties")})
 @Profile("fuenzalida")
 @EnableJpaRepositories(entityManagerFactoryRef = "postgreEntityManagerFactory", transactionManagerRef = "postgreTransacctionManager", basePackages = "cl.arpis.correo.repositories")
 public class FuenzalidaConfig {
