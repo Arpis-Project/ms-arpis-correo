@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -21,15 +22,16 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @Profile("fuenzalida")
-@EnableJpaRepositories(entityManagerFactoryRef = "postgreEntityManagerFactory",
-		transactionManagerRef = "postgreTransacctionManager",
+@EnableJpaRepositories(entityManagerFactoryRef = "entityManagerFactory",
+		transactionManagerRef = "transacctionManager",
 		basePackages = "cl.arpis.correo.persistence.clientes.fuenzalida.repositories")
 public class FuenzalidaConfig {
 
 	@Autowired
 	private Environment environment;
 
-	@Bean(name = "postgreDataSouce")
+	@Primary
+	@Bean(name = "dataSource")
 	public DataSource postgreDataSouce() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setUrl(environment.getProperty("spring.postgre.datasource.url"));
@@ -39,7 +41,8 @@ public class FuenzalidaConfig {
 		return dataSource;
 	}
 
-	@Bean(name = "postgreEntityManagerFactory")
+	@Primary
+	@Bean(name = "entityManagerFactory")
 	public LocalContainerEntityManagerFactoryBean postgreEntityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
 		entityManager.setDataSource(postgreDataSouce());
@@ -48,13 +51,14 @@ public class FuenzalidaConfig {
 		entityManager.setJpaVendorAdapter(vendorAdapter);
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("hibernate.hbm2ddl.auto", environment.getProperty("spring.postgre.jpa.hibernate.ddl-auto"));
-		properties.put("hibernate.shwo-sql", environment.getProperty("spring.postgre.jpa.show"));
+		properties.put("hibernate.show-sql", environment.getProperty("spring.postgre.jpa.show"));
 		properties.put("hibernate.dialect", environment.getProperty("spring.postgre.jpa.database-platform"));
 		entityManager.setJpaPropertyMap(properties);
 		return entityManager;
 	}
 
-	@Bean(name = "postgreTransacctionManager")
+	@Primary
+	@Bean(name = "transacctionManager")
 	public PlatformTransactionManager postgreTransacctionManager() {
 		JpaTransactionManager transacctionManager = new JpaTransactionManager();
 		transacctionManager.setEntityManagerFactory(postgreEntityManagerFactory().getObject());

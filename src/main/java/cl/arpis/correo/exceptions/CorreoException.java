@@ -5,7 +5,7 @@ package cl.arpis.correo.exceptions;
  * @author steph
  *
  */
-public class CorreoException extends RuntimeException {
+public class CorreoException extends ArpisException {
 
 	/**
 	 * 

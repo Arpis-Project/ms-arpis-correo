@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -21,15 +22,16 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @Profile("samsonite")
-@EnableJpaRepositories(entityManagerFactoryRef = "oracleEntityManagerFactory",
-		transactionManagerRef = "oracleTransacctionManager",
+@EnableJpaRepositories(entityManagerFactoryRef = "entityManagerFactory",
+		transactionManagerRef = "transacctionManager",
 		basePackages = "cl.arpis.correo.persistence.clientes.samsonite.repositories")
 public class SamsoniteConfig {
 
 	@Autowired
 	private Environment environment;
 
-	@Bean(name = "oracleDataSouce")
+	@Primary
+	@Bean(name = "dataSource")
 	public DataSource oracleDataSouce() {
 		DriverManagerDataSource  dataSource = new DriverManagerDataSource();
 		dataSource.setUrl(environment.getProperty("spring.oracle.datasource.url"));
@@ -39,7 +41,8 @@ public class SamsoniteConfig {
 		return dataSource;
 	}
 
-	@Bean(name = "oracleEntityManagerFactory")
+	@Primary
+	@Bean(name = "entityManagerFactory")
 	public LocalContainerEntityManagerFactoryBean oracleEntityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
 		entityManager.setDataSource(oracleDataSouce());
@@ -48,14 +51,14 @@ public class SamsoniteConfig {
 		entityManager.setJpaVendorAdapter(vendorAdapter);
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("hibernate.hbm2ddl.auto", environment.getProperty("spring.oracle.jpa.hibernate.ddl-auto"));
-		properties.put("hibernate.shwo-sql", environment.getProperty("spring.oracle.jpa.show"));
-		properties.put("hibernate.dialect", environment.getProperty("spring.oracle.jpa.database-platform"));
+		properties.put("hibernate.show-sql", environment.getProperty("spring.oracle.jpa.show"));
 		properties.put("hibernate.dialect", environment.getProperty("spring.oracle.jpa.database-platform"));
 		entityManager.setJpaPropertyMap(properties);
 		return entityManager;
 	}
 
-	@Bean(name = "oracleTransacctionManager")
+	@Primary
+	@Bean(name = "transacctionManager")
 	public PlatformTransactionManager oracleTransacctionManager() {
 		JpaTransactionManager transacctionManager = new JpaTransactionManager();
 		transacctionManager.setEntityManagerFactory(oracleEntityManagerFactory().getObject());
