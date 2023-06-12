@@ -31,26 +31,24 @@ public class CorreoController {
 	public ResponseEntity<RespuestaDto> enviarCorreo(
 			@RequestBody @Valid MensajeDto correo,
 			@RequestHeader(name = "Authorization", required = true) String usuario) {
-		RespuestaDto resp = serviceCorreo.enviarCorreo(correo);
-		return ResponseEntity.ok(resp);
-	}
-
-	@GetMapping(path = "/proyecto/{id}/error/{error}",
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ContenedorCorreoDto> listarCorreos(
-			@PathVariable("id") long idProyecto,
-			@PathVariable("error") String error,
-			@RequestHeader(name = "Authorization", required = true) String usuario) {
-		ContenedorCorreoDto resp = serviceCorreo.buscarCorreos(idProyecto, error);
+		RespuestaDto resp = this.serviceCorreo.enviarCorreo(correo);
 		return ResponseEntity.ok(resp);
 	}
 
 	@GetMapping(path = "/proyecto/{id}",
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ContenedorCorreoDto> listarCorreos(
-			@PathVariable("id") long idProyecto,
-			@RequestHeader(name = "Authorization", required = true) String usuario) {
-		ContenedorCorreoDto resp = serviceCorreo.buscarCorreos(idProyecto);
+			@PathVariable(name = "id", required = true) Long idProyecto) {
+		ContenedorCorreoDto resp = this.serviceCorreo.buscarCorreos(idProyecto);
+		return ResponseEntity.ok(resp);
+	}
+
+	@GetMapping(path = "/proyecto/{id}/error/{error}",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ContenedorCorreoDto> listarCorreos(
+			@PathVariable(name = "id", required = true) Long idProyecto,
+			@PathVariable(name = "error", required = true) String error) {
+		ContenedorCorreoDto resp = this.serviceCorreo.buscarCorreos(idProyecto, error);
 		return ResponseEntity.ok(resp);
 	}
 
