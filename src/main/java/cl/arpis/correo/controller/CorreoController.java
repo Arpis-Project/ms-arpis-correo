@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 import cl.arpis.correo.dto.ContenedorCorreoDto;
 import cl.arpis.correo.dto.MensajeDto;
 import cl.arpis.correo.dto.RespuestaDto;
-import cl.arpis.correo.service.ICorreoService;
+import cl.arpis.correo.service.CorreoService;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/v1/correo")
 public class CorreoController {
 
-	private ICorreoService serviceCorreo;
+	private CorreoService serviceCorreo;
 
-	public CorreoController(ICorreoService serviceCorreo) {
+	public CorreoController(CorreoService serviceCorreo) {
 		this.serviceCorreo = serviceCorreo;
 	}
 

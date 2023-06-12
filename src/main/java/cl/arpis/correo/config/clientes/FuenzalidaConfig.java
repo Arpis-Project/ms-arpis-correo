@@ -22,8 +22,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @Profile("fuenzalida")
 @EnableJpaRepositories(entityManagerFactoryRef = "postgreEntityManagerFactory",
-	transactionManagerRef = "postgreTransacctionManager",
-	basePackages = "cl.arpis.correo.repositories")
+		transactionManagerRef = "postgreTransacctionManager",
+		basePackages = "cl.arpis.correo.persistence.clientes.fuenzalida.repositories")
 public class FuenzalidaConfig {
 
 	@Autowired
@@ -43,7 +43,7 @@ public class FuenzalidaConfig {
 	public LocalContainerEntityManagerFactoryBean postgreEntityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
 		entityManager.setDataSource(postgreDataSouce());
-		entityManager.setPackagesToScan("cl.arpis.correo.entities");
+		entityManager.setPackagesToScan("cl.arpis.correo.persistence.clientes.fuenzalida.entities");
 		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		entityManager.setJpaVendorAdapter(vendorAdapter);
 		Map<String, Object> properties = new HashMap<String, Object>();

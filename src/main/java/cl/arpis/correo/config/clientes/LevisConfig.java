@@ -22,8 +22,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @Profile("levis")
 @EnableJpaRepositories(entityManagerFactoryRef = "oracleEntityManagerFactory",
-	transactionManagerRef = "oracleTransacctionManager",
-	basePackages = "cl.arpis.correo.repositories")
+		transactionManagerRef = "oracleTransacctionManager",
+		basePackages = "cl.arpis.correo.persistence.clientes.levis.repositories")
 public class LevisConfig {
 
 	@Autowired
@@ -43,7 +43,7 @@ public class LevisConfig {
 	public LocalContainerEntityManagerFactoryBean oracleEntityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
 		entityManager.setDataSource(oracleDataSouce());
-		entityManager.setPackagesToScan("cl.arpis.correo.entities");
+		entityManager.setPackagesToScan("cl.arpis.correo.persistence.clientes.levis.entities");
 		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		entityManager.setJpaVendorAdapter(vendorAdapter);
 		Map<String, Object> properties = new HashMap<String, Object>();

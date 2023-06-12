@@ -16,12 +16,12 @@ import cl.arpis.correo.dto.CorreoDto;
 import cl.arpis.correo.dto.MensajeDto;
 import cl.arpis.correo.dto.MensajeEmailDto;
 import cl.arpis.correo.exceptions.CorreoException;
-import cl.arpis.correo.service.IEmailService;
+import cl.arpis.correo.service.EmailService;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class EmailServiceImpl implements IEmailService {
+public class EmailServiceImpl implements EmailService {
 
 	private Environment env;
 
