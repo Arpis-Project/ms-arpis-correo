@@ -33,7 +33,7 @@ public class LevisConfig {
 	public DataSource oracleDataSouce() {
 		DriverManagerDataSource  dataSource = new DriverManagerDataSource();
 		dataSource.setUrl(environment.getProperty("spring.oracle.datasource.url"));
-		dataSource.setUsername(environment.getProperty("spring.oracle.datasource.usernam"));
+		dataSource.setUsername(environment.getProperty("spring.oracle.datasource.username"));
 		dataSource.setPassword(environment.getProperty("spring.oracle.datasource.password"));
 		dataSource.setDriverClassName(environment.getProperty("spring.oracle.datasource.driver-class-name"));
 		return dataSource;
