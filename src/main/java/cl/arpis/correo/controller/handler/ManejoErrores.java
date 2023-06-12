@@ -3,8 +3,6 @@ package cl.arpis.correo.controller.handler;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import javax.validation.UnexpectedTypeException;
-
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cl.arpis.correo.dto.RespuestaErrorDTO;
 import cl.arpis.correo.exceptions.CorreoException;
+import jakarta.validation.UnexpectedTypeException;
 import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice

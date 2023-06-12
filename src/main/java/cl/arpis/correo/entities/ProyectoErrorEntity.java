@@ -1,24 +1,17 @@
 package cl.arpis.correo.entities;
 
-import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Builder;
 
 @Entity
 @Table(name = "API_CC_PROYECTO_ERROR")
 @Builder
-public class ProyectoErrorEntity implements Serializable{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1874202456011541502L;
+public class ProyectoErrorEntity {
 
 	@Id
 	@Column(name = "ID_PROYECTOCORREO", nullable = false)
@@ -26,7 +19,7 @@ public class ProyectoErrorEntity implements Serializable{
 
 	@Column(name = "ID_TIPO_ERROR", nullable = false)
 	private Long idTipoError;
-	
+
 	@Column(name = "ID_PROYECTO", nullable = false)
 	private Long idProyecto;
 
@@ -35,8 +28,8 @@ public class ProyectoErrorEntity implements Serializable{
 
 	@Column(name = "ID_TIPO_ENVIO", nullable = false)
 	private Long idTipoEnvio;
-	
+
 	@Column(name = "FECHA_REACION", nullable = false)
 	private Date fechaCreacion;
-	
+
 }

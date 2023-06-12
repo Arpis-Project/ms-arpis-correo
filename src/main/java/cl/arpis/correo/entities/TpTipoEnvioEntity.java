@@ -1,23 +1,15 @@
 package cl.arpis.correo.entities;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Builder;
 
 @Entity
 @Table(name = "API_CC_TP_TIPO_ENVIO")
 @Builder
-public class TpTipoEnvioEntity implements Serializable{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2869288585693399437L;
+public class TpTipoEnvioEntity {
 
 	@Id
 	@Column(name = "ID_TIPO_ENVIO", nullable = false)
@@ -31,4 +23,5 @@ public class TpTipoEnvioEntity implements Serializable{
 
 	@Column(name = "ACTIVO", nullable = false)
 	private String activo;
+
 }

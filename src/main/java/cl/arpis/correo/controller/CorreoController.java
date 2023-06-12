@@ -1,7 +1,5 @@
 package cl.arpis.correo.controller;
 
-import javax.validation.Valid;
-
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +14,7 @@ import cl.arpis.correo.dto.ContenedorCorreoDto;
 import cl.arpis.correo.dto.MensajeDto;
 import cl.arpis.correo.dto.RespuestaDto;
 import cl.arpis.correo.service.ICorreoService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/v1/correo")

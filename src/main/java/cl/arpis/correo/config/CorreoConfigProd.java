@@ -11,6 +11,6 @@ import org.springframework.context.annotation.PropertySources;
 	@PropertySource("classpath:db-prod.properties")
 })
 @Profile("prod")
-public class CorreoConfig {
+public class CorreoConfigProd {
 
 }

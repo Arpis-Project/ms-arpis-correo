@@ -3,15 +3,14 @@ package cl.arpis.correo.repositories.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import cl.arpis.correo.config.QueriesConfig;
 import cl.arpis.correo.entities.CorreoEntity;
 import cl.arpis.correo.repositories.ICorreoRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 
 @Repository
 @Transactional
