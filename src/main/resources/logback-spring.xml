@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
 
-	<include
-		resource="org/springframework/boot/logging/logback/defaults.xml" />
-	<include
-		resource="org/springframework/boot/logging/logback/console-appender.xml" />
+	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
+	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
 
-	<property name="LOG_PATTERN"
-		value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%5p] ${hostName} --- [%15.15t] %-50.50c{1} : %m%n%ex" />
+	<property name="LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%5p] ${hostName} --- [%15.15t] %-40.40c{1} : %m%n%ex" />
 
 	<appender name="Console"
 		class="ch.qos.logback.core.ConsoleAppender">
@@ -16,14 +13,12 @@
 		</layout>
 	</appender>
 
-	<appender name="File"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<encoder>
 			<pattern>${LOG_PATTERN}</pattern>
 		</encoder>
 		<prudent>true</prudent>
-		<rollingPolicy
-			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>
 				${LOGS_PATH}/@project.artifactId@/@project.artifactId@-@project.version@-%d{yyyy-MM-dd}.log
 			</fileNamePattern>
@@ -31,7 +26,7 @@
 		</rollingPolicy>
 	</appender>
 
-	<logger name="cl.arpis" level="${LOGS_LEVEL}" additivity="false">
+	<logger name="cl.arpis.correo" level="${LOGS_LEVEL}" additivity="false">
 		<appender-ref ref="Console" />
 		<appender-ref ref="File" />
 	</logger>

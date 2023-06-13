@@ -30,4 +30,5 @@ public class MapperUtils {
 		}
 		return sourceList.stream().map(e -> objectToObject(e, destinationClass)).collect(Collectors.toList());
 	}
+
 }
