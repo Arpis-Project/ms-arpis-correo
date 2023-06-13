@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import cl.arpis.correo.persistence.clientes.fuenzalida.entities.ApiUsuariosEntity;
+import cl.arpis.correo.persistence.clientes.fuenzalida.entities.UsuarioEntity;
 
 /**
  * 
@@ -13,8 +13,8 @@ import cl.arpis.correo.persistence.clientes.fuenzalida.entities.ApiUsuariosEntit
  *
  */
 @Profile("fuenzalida")
-public interface ApiUsuariosRepository extends JpaRepository<ApiUsuariosEntity, Long> {
+public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
 
-	Optional<ApiUsuariosEntity> findByLogin(String login);
+	Optional<UsuarioEntity> findByLogin(String login);
 
 }

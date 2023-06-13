@@ -1,4 +1,4 @@
-package cl.arpis.correo.persistence.clientes.levis.repositories.impl;
+package cl.arpis.correo.persistence.clientes.samsonite.repositories.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,12 +11,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import cl.arpis.correo.dto.CorreoDto;
-import cl.arpis.correo.dto.UsuariosDto;
+import cl.arpis.correo.dto.UsuarioDto;
 import cl.arpis.correo.exceptions.CorreoDbException;
-import cl.arpis.correo.persistence.clientes.levis.entities.ApiUsuariosEntity;
-import cl.arpis.correo.persistence.clientes.levis.entities.CorreoEntity;
-import cl.arpis.correo.persistence.clientes.levis.repositories.ApiUsuariosRepository;
-import cl.arpis.correo.persistence.general.custom.CustomCorreosRepository;
+import cl.arpis.correo.persistence.clientes.samsonite.entities.CorreoEntity;
+import cl.arpis.correo.persistence.clientes.samsonite.entities.UsuarioEntity;
+import cl.arpis.correo.persistence.clientes.samsonite.repositories.UsuarioRepository;
+import cl.arpis.correo.persistence.general.custom.CorreosRepository;
 import cl.arpis.correo.util.MapperUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -28,26 +28,26 @@ import jakarta.persistence.NoResultException;
  */
 @Repository
 @Transactional
+@Profile("samsonite")
 @SuppressWarnings("unchecked")
-@Profile("levis")
-public class LevisCustomCorreosRepositoryImpl implements CustomCorreosRepository {
+public class SamsoniteCorreosRepositoryImpl implements CorreosRepository {
 
-	private EntityManager entiManager;
+	private EntityManager entityManager;
 	private Environment env;
-	private ApiUsuariosRepository apiUsuariosRepository;
+	private UsuarioRepository usuariosRepository;
 
-	public LevisCustomCorreosRepositoryImpl(Environment env,
-			EntityManager entiManager,
-			ApiUsuariosRepository apiUsuariosRepository) {
+	public SamsoniteCorreosRepositoryImpl(Environment env,
+			EntityManager entityManager,
+			UsuarioRepository usuariosRepository) {
 		this.env = env;
-		this.entiManager = entiManager;
-		this.apiUsuariosRepository = apiUsuariosRepository;
+		this.entityManager = entityManager;
+		this.usuariosRepository = usuariosRepository;
 	}
 
 	@Override
 	public List<CorreoDto> buscarCorreos(Long idProyecto) {
 		try {
-			final List<CorreoEntity> correos = this.entiManager
+			final List<CorreoEntity> correos = (List<CorreoEntity>) this.entityManager
 					.createNativeQuery(this.env.getProperty("listaCorreo"), CorreoEntity.class)
 					.setParameter("ID_PROYECTO", idProyecto)
 					.getResultList();
@@ -62,7 +62,7 @@ public class LevisCustomCorreosRepositoryImpl implements CustomCorreosRepository
 	@Override
 	public List<CorreoDto> buscarCorreos(Long idProyecto, String error) {
 		try {
-			final List<CorreoEntity> correos = this.entiManager
+			final List<CorreoEntity> correos = this.entityManager
 					.createNativeQuery(this.env.getProperty("listaCorreoError"), CorreoEntity.class)
 					.setParameter("ID_PROYECTO", idProyecto)
 					.setParameter("ID_TIPO_ERROR", error)
@@ -76,10 +76,10 @@ public class LevisCustomCorreosRepositoryImpl implements CustomCorreosRepository
 	}
 
 	@Override
-	public Optional<UsuariosDto> buscarUsuario(final String usuario) {
-		Optional<ApiUsuariosEntity> usuarioDb = this.apiUsuariosRepository.findByLogin(usuario);
+	public Optional<UsuarioDto> buscarUsuario(final String usuario) {
+		Optional<UsuarioEntity> usuarioDb = this.usuariosRepository.findByLogin(usuario);
 		if (usuarioDb.isPresent()) {
-			return Optional.of(MapperUtils.objectToObject(usuarioDb.get(), UsuariosDto.class));
+			return Optional.of(MapperUtils.objectToObject(usuarioDb.get(), UsuarioDto.class));
 		}
 		return Optional.empty();
 	}

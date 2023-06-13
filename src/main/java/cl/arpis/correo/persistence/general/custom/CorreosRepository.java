@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import cl.arpis.correo.dto.CorreoDto;
-import cl.arpis.correo.dto.UsuariosDto;
+import cl.arpis.correo.dto.UsuarioDto;
 
 /**
  * 
@@ -12,12 +12,12 @@ import cl.arpis.correo.dto.UsuariosDto;
  * @param <T>
  *
  */
-public interface CustomCorreosRepository {
+public interface CorreosRepository {
 
 	List<CorreoDto> buscarCorreos(Long idProyecto);
 
 	List<CorreoDto> buscarCorreos(Long idProyecto, String error);
 
-	Optional<UsuariosDto> buscarUsuario(String usuario);
+	Optional<UsuarioDto> buscarUsuario(String usuario);
 
 }

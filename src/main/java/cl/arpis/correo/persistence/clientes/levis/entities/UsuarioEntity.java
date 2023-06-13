@@ -2,8 +2,11 @@ package cl.arpis.correo.persistence.clientes.levis.entities;
 
 import java.util.Date;
 
+import cl.arpis.correo.enums.ActivoEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,12 +18,12 @@ import lombok.NoArgsConstructor;
 @Table(name = "api_usuario", schema = "arpis")
 @Data
 @NoArgsConstructor
-public class ApiUsuariosEntity {
+public class UsuarioEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_usuario_api")
-	private Long idUsuarioApi;
+	private Long id;
 
 	@Column(name = "login")
 	private String login;
@@ -32,7 +35,8 @@ public class ApiUsuariosEntity {
 	private String nombreEmpresa;
 
 	@Column(name = "activo")
-	private String activo;
+	@Enumerated(EnumType.STRING)
+	private ActivoEnum activo;
 
 	@Column(name = "fecha_creacion")
 	private Date fechaCreacion;

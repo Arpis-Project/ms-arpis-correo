@@ -10,18 +10,18 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.TransactionException;
 
-import cl.arpis.correo.dto.UsuariosDto;
+import cl.arpis.correo.dto.UsuarioDto;
 import cl.arpis.correo.exceptions.ArpisException;
-import cl.arpis.correo.persistence.general.custom.CustomCorreosRepository;
+import cl.arpis.correo.persistence.general.custom.CorreosRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Component("autenticacion")
 @Slf4j
 public class ProveedorAutenticacion implements AuthenticationProvider {
 
-	private CustomCorreosRepository correosRepository;
+	private CorreosRepository correosRepository;
 
-	public ProveedorAutenticacion(CustomCorreosRepository correosRepository) {
+	public ProveedorAutenticacion(CorreosRepository correosRepository) {
 		this.correosRepository = correosRepository;
 	}
 
@@ -29,7 +29,7 @@ public class ProveedorAutenticacion implements AuthenticationProvider {
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		String pass = authentication.getCredentials().toString();
 		try {
-			Optional<UsuariosDto> usuario = this.correosRepository.buscarUsuario(authentication.getName());
+			Optional<UsuarioDto> usuario = this.correosRepository.buscarUsuario(authentication.getName());
 			if(usuario.isEmpty()) {
 				return null;
 			}

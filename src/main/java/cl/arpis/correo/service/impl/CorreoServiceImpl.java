@@ -9,7 +9,7 @@ import cl.arpis.correo.dto.CorreoDto;
 import cl.arpis.correo.dto.MensajeDto;
 import cl.arpis.correo.dto.RespuestaDto;
 import cl.arpis.correo.exceptions.CorreoException;
-import cl.arpis.correo.persistence.general.custom.CustomCorreosRepository;
+import cl.arpis.correo.persistence.general.custom.CorreosRepository;
 import cl.arpis.correo.service.CorreoService;
 import cl.arpis.correo.service.EmailService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CorreoServiceImpl implements CorreoService {
 
-	private CustomCorreosRepository correoRepository;
+	private CorreosRepository correoRepository;
 	private EmailService mailService;
 
-	public CorreoServiceImpl(CustomCorreosRepository correoRepository,
+	public CorreoServiceImpl(CorreosRepository correoRepository,
 			EmailService mailService) {
 		this.correoRepository = correoRepository;
 		this.mailService = mailService;
