@@ -8,41 +8,32 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(schema = "REPORTUSER", name = "AP_EMAIL_TD_CORREOS")
+@Table(schema = "REPORTUSER", name = "AP_EMAIL_TD_PROYECTOS")
 @Data
 @NoArgsConstructor
-public class CorreoEntity {
+public class ProyectoEntity{
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CORREOS")
-	@SequenceGenerator(schema = "REPORTUSER", sequenceName = "SEQ_AP_EMAIL_TD_CORREOS",
-		allocationSize = 1, name = "SEQ_CORREOS")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_PROYECTOS")
+	@SequenceGenerator(schema = "REPORTUSER", sequenceName = "SEQ_AP_EMAIL_TD_PROYECTOS",
+		allocationSize = 1, name = "SEQ_PROYECTOS")
 	@Column(name = "ID", nullable = false)
 	private Integer id;
 
-	@Column(name = "EMAIL", nullable = false)
-	private String email;
-
-	@Column(name = "NOMBRE")
+	@Column(name = "NOMBRE", nullable = false)
 	private String nombre;
 
-	@Column(name = "PASSWORD")
-	private String pasword;
+	@Column(name = "DESCRIPCION")
+	private String descripcion;
 
 	@Column(name = "ACTIVO", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private ActivoEnum activo;
-
-	@ManyToOne
-	@JoinColumn(name = "ID_TIPO_CORREO", nullable = false, updatable = true, insertable = true)
-	private TipoCorreoEntity tipoCorreo;
 
 }

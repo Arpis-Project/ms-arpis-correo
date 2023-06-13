@@ -27,8 +27,8 @@ public class MensajeDto implements Serializable {
 	 */
 	private static final long serialVersionUID = 6955170255384965705L;
 	@NotNull
-	private Long proyecto;
-	private String codError;
+	private Integer proyecto;
+	private Short codError;
 	@NotNull
 	@NotEmpty
 	private String asunto;

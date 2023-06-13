@@ -10,7 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.TransactionException;
 
-import cl.arpis.correo.dto.UsuarioDto;
+import cl.arpis.correo.dto.datos.UsuarioDto;
 import cl.arpis.correo.exceptions.ArpisException;
 import cl.arpis.correo.persistence.general.custom.CorreosRepository;
 import lombok.extern.slf4j.Slf4j;

@@ -5,21 +5,20 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.env.Environment;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import cl.arpis.correo.dto.CorreoDto;
-import cl.arpis.correo.dto.UsuarioDto;
-import cl.arpis.correo.exceptions.CorreoDbException;
-import cl.arpis.correo.persistence.clientes.fuenzalida.entities.CorreoEntity;
+import cl.arpis.correo.dto.datos.ProyectoCorreoDto;
+import cl.arpis.correo.dto.datos.ProyectoErrorDto;
+import cl.arpis.correo.dto.datos.UsuarioDto;
+import cl.arpis.correo.persistence.clientes.fuenzalida.entities.ProyectoCorreoEntity;
+import cl.arpis.correo.persistence.clientes.fuenzalida.entities.ProyectoErrorEntity;
 import cl.arpis.correo.persistence.clientes.fuenzalida.entities.UsuarioEntity;
+import cl.arpis.correo.persistence.clientes.fuenzalida.repositories.ProyectoCorreoRepository;
+import cl.arpis.correo.persistence.clientes.fuenzalida.repositories.ProyectoErrorRepository;
 import cl.arpis.correo.persistence.clientes.fuenzalida.repositories.UsuarioRepository;
 import cl.arpis.correo.persistence.general.custom.CorreosRepository;
 import cl.arpis.correo.util.MapperUtils;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 
 /**
  * 
@@ -29,50 +28,18 @@ import jakarta.persistence.NoResultException;
 @Repository
 @Transactional
 @Profile("fuenzalida")
-@SuppressWarnings("unchecked")
 public class FuenzalidaCorreosRepositoryImpl implements CorreosRepository {
 
-	private EntityManager entityManager;
-	private Environment env;
 	private UsuarioRepository usuariosRepository;
+	private ProyectoCorreoRepository proyectoCorreoRepository;
+	private ProyectoErrorRepository proyectoErrorRepository;
 
-	public FuenzalidaCorreosRepositoryImpl(Environment env,
-			EntityManager entityManager,
-			UsuarioRepository usuariosRepository) {
-		this.env = env;
-		this.entityManager = entityManager;
+	public FuenzalidaCorreosRepositoryImpl(UsuarioRepository usuariosRepository,
+			ProyectoCorreoRepository proyectoCorreoRepository,
+			ProyectoErrorRepository proyectoErrorRepository) {
 		this.usuariosRepository = usuariosRepository;
-	}
-
-	@Override
-	public List<CorreoDto> buscarCorreos(Long idProyecto) {
-		try {
-			final List<CorreoEntity> correos = this.entityManager
-					.createNativeQuery(this.env.getProperty("listaCorreo"), CorreoEntity.class)
-					.setParameter("ID_PROYECTO", idProyecto)
-					.getResultList();
-			return MapperUtils.listToList(correos, CorreoDto.class);
-		} catch (NoResultException e) {
-			return new ArrayList<>();
-		} catch (DataAccessException e) {
-			throw new CorreoDbException("", e);
-		}
-	}
-
-	@Override
-	public List<CorreoDto> buscarCorreos(Long idProyecto, String error) {
-		try {
-			final List<CorreoEntity> correos = this.entityManager
-					.createNativeQuery(this.env.getProperty("listaCorreoError"), CorreoEntity.class)
-					.setParameter("ID_PROYECTO", idProyecto)
-					.setParameter("ID_TIPO_ERROR", error)
-					.getResultList();
-			return MapperUtils.listToList(correos, CorreoDto.class);
-		} catch (NoResultException e) {
-			return new ArrayList<>();
-		} catch (DataAccessException e) {
-			throw new CorreoDbException("", e);
-		}
+		this.proyectoCorreoRepository = proyectoCorreoRepository;
+		this.proyectoErrorRepository = proyectoErrorRepository;
 	}
 
 	@Override
@@ -82,6 +49,24 @@ public class FuenzalidaCorreosRepositoryImpl implements CorreosRepository {
 			return Optional.of(MapperUtils.objectToObject(usuarioDb.get(), UsuarioDto.class));
 		}
 		return Optional.empty();
+	}
+
+	@Override
+	public List<ProyectoCorreoDto> obtenerProyectoCorreo(final Integer idProyecto) {
+		final List<ProyectoCorreoEntity> proyectoInfo = this.proyectoCorreoRepository.findByProyecto_Id(idProyecto);
+		if(proyectoInfo.isEmpty()) {
+			return new ArrayList<>();
+		}
+		return MapperUtils.listToList(proyectoInfo, ProyectoCorreoDto.class);
+	}
+
+	@Override
+	public List<ProyectoErrorDto> obtenerProyectoErrorPorTipo(final Integer idProyecto, final Short idTipoError) {
+		final List<ProyectoErrorEntity> proyectoInfo = this.proyectoErrorRepository.findByProyecto_IdAndTipoError_Id(idProyecto, idTipoError);
+		if(proyectoInfo.isEmpty()) {
+			return new ArrayList<>();
+		}
+		return MapperUtils.listToList(proyectoInfo, ProyectoErrorDto.class);
 	}
 
 }

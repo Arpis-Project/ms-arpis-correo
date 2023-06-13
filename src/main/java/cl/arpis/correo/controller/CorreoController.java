@@ -38,18 +38,16 @@ public class CorreoController {
 	@GetMapping(path = "/proyecto/{id}",
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ContenedorCorreoDto> listarCorreos(
-			@PathVariable(name = "id", required = true) Long idProyecto) {
-		ContenedorCorreoDto resp = this.serviceCorreo.buscarCorreos(idProyecto);
-		return ResponseEntity.ok(resp);
+			@PathVariable(name = "id", required = true) Integer idProyecto) {
+		return ResponseEntity.ok(this.serviceCorreo.buscarCorreos(idProyecto));
 	}
 
 	@GetMapping(path = "/proyecto/{id}/error/{error}",
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ContenedorCorreoDto> listarCorreos(
-			@PathVariable(name = "id", required = true) Long idProyecto,
-			@PathVariable(name = "error", required = true) String error) {
-		ContenedorCorreoDto resp = this.serviceCorreo.buscarCorreos(idProyecto, error);
-		return ResponseEntity.ok(resp);
+			@PathVariable(name = "id", required = true) Integer idProyecto,
+			@PathVariable(name = "error", required = true) Short idTipoError) {
+		return ResponseEntity.ok(this.serviceCorreo.buscarCorreos(idProyecto, idTipoError));
 	}
 
 }

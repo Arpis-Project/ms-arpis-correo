@@ -1,32 +1,43 @@
-package cl.arpis.correo.dto;
+package cl.arpis.correo.dto.datos;
 
 import java.io.Serializable;
-import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
-import cl.arpis.correo.dto.datos.CorreoDto;
+import cl.arpis.correo.enums.ActivoEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 
+ * @author steph
+ *
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude(Include.NON_NULL)
-public class ContenedorCorreoDto implements Serializable {
+public class CorreoDto implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -2993733803645325855L;
+	private static final long serialVersionUID = -4114610840856447460L;
 
-	private List<CorreoDto> listaCorreo;
+	private Integer id;
+	private String email;
+	private String nombre;
+	@JsonIgnore
+	private String pasword;
+	private ActivoEnum activo;
+	private TipoCorreoDto tipoCorreo;
 
 }

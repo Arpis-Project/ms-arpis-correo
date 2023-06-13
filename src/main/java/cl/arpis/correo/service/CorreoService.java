@@ -13,8 +13,8 @@ public interface CorreoService {
 
 	public RespuestaDto enviarCorreo(MensajeDto correo);
 
-	public ContenedorCorreoDto buscarCorreos(Long idProyecto);
+	public ContenedorCorreoDto buscarCorreos(Integer idProyecto);
 
-	public ContenedorCorreoDto buscarCorreos(Long idProyecto, String error);
+	public ContenedorCorreoDto buscarCorreos(Integer idProyecto, Short idTipoError);
 
 }
