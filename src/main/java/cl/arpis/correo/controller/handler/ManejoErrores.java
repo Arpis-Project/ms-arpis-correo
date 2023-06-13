@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import cl.arpis.correo.dto.RespuestaErrorDTO;
 import cl.arpis.correo.exceptions.ArpisException;
@@ -110,6 +111,16 @@ public class ManejoErrores {
 				.body(RespuestaErrorDTO.builder()
 						.error("Error de datos")
 						.detalles(Arrays.asList(ex.getMostSpecificCause().fillInStackTrace().getLocalizedMessage().split("\\n")[0]))
+						.build());
+	}
+
+	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+	@ResponseBody
+	private ResponseEntity<RespuestaErrorDTO> manejoError(MethodArgumentTypeMismatchException ex) {
+		return ResponseEntity.badRequest()
+				.body(RespuestaErrorDTO.builder()
+						.error("Error de datos entrada")
+						.detalles(Arrays.asList("Revise los datos de entrada (tipos y contenido)"))
 						.build());
 	}
 
