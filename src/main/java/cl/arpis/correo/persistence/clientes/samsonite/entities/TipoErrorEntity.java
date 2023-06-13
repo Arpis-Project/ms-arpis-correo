@@ -14,29 +14,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(schema = "REPORTUSER", name = "AP_EMAIL_TD_CORREOS")
+@Table(schema = "REPORTUSER", name = "AP_EMAIL_TP_TIPO_ERROR")
 @Data
 @NoArgsConstructor
-public class CorreoEntity {
+public class TipoErrorEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CORREOS")
-	@SequenceGenerator(schema = "REPORTUSER", sequenceName = "SEQ_AP_EMAIL_TD_CORREOS",
-		allocationSize = 1, name = "SEQ_CORREOS")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TIPO_ERROR")
+	@SequenceGenerator(schema = "REPORTUSER", sequenceName = "SEQ_AP_EMAIL_TP_TIPO_ERROR",
+		allocationSize = 1, name = "SEQ_TIPO_ERROR")
 	@Column(name = "ID", nullable = false)
-	private Integer id;
+	private Short id;
 
-	@Column(name = "EMAIL", nullable = false)
-	private String email;
-
-	@Column(name = "NOMBRE")
+	@Column(name = "NOMBRE", nullable = false)
 	private String nombre;
 
-	@Column(name = "PASSWORD")
-	private String pasword;
-
-	@Column(name = "ID_TIPO_CORREO", nullable = false)
-	private Short idTipoCorreo;
+	@Column(name = "DESCRIPCION")
+	private String descripcion;
 
 	@Column(name = "ACTIVO", nullable = false)
 	@Enumerated(EnumType.STRING)
