@@ -15,6 +15,8 @@ import cl.arpis.correo.dto.UsuarioDto;
 import cl.arpis.correo.exceptions.CorreoDbException;
 import cl.arpis.correo.persistence.clientes.samsonite.entities.CorreoEntity;
 import cl.arpis.correo.persistence.clientes.samsonite.entities.UsuarioEntity;
+import cl.arpis.correo.persistence.clientes.samsonite.repositories.ProyectoCorreoRepository;
+import cl.arpis.correo.persistence.clientes.samsonite.repositories.ProyectoErrorRepository;
 import cl.arpis.correo.persistence.clientes.samsonite.repositories.UsuarioRepository;
 import cl.arpis.correo.persistence.general.custom.CorreosRepository;
 import cl.arpis.correo.util.MapperUtils;
@@ -35,13 +37,28 @@ public class SamsoniteCorreosRepositoryImpl implements CorreosRepository {
 	private EntityManager entityManager;
 	private Environment env;
 	private UsuarioRepository usuariosRepository;
+	private ProyectoCorreoRepository proyectoCorreoRepository;
+	private ProyectoErrorRepository proyectoErrorRepository;
 
 	public SamsoniteCorreosRepositoryImpl(Environment env,
 			EntityManager entityManager,
-			UsuarioRepository usuariosRepository) {
+			UsuarioRepository usuariosRepository,
+			ProyectoCorreoRepository proyectoCorreoRepository,
+			ProyectoErrorRepository proyectoErrorRepository) {
 		this.env = env;
 		this.entityManager = entityManager;
 		this.usuariosRepository = usuariosRepository;
+		this.proyectoCorreoRepository = proyectoCorreoRepository;
+		this.proyectoErrorRepository = proyectoErrorRepository;
+	}
+
+	@Override
+	public Optional<UsuarioDto> buscarUsuario(final String usuario) {
+		Optional<UsuarioEntity> usuarioDb = this.usuariosRepository.findByLogin(usuario);
+		if (usuarioDb.isPresent()) {
+			return Optional.of(MapperUtils.objectToObject(usuarioDb.get(), UsuarioDto.class));
+		}
+		return Optional.empty();
 	}
 
 	@Override
@@ -73,15 +90,6 @@ public class SamsoniteCorreosRepositoryImpl implements CorreosRepository {
 		} catch (DataAccessException e) {
 			throw new CorreoDbException("", e);
 		}
-	}
-
-	@Override
-	public Optional<UsuarioDto> buscarUsuario(final String usuario) {
-		Optional<UsuarioEntity> usuarioDb = this.usuariosRepository.findByLogin(usuario);
-		if (usuarioDb.isPresent()) {
-			return Optional.of(MapperUtils.objectToObject(usuarioDb.get(), UsuarioDto.class));
-		}
-		return Optional.empty();
 	}
 
 }

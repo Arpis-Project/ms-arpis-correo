@@ -34,7 +34,7 @@ public class UsuarioDto implements Serializable {
 	 */
 	private static final long serialVersionUID = 6542305039310125419L;
 
-	private Long id;
+	private Short id;
 	private String login;
 	@JsonIgnore
 	private String password;

@@ -19,17 +19,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(schema = "REPORTUSER", name = "ARPIS_EMAIL_TD_USUARIO")
+@Table(schema = "REPORTUSER", name = "AP_EMAIL_TD_USUARIOS")
 @Data
 @NoArgsConstructor
 public class UsuarioEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_USUARIO")
-	@SequenceGenerator(schema = "REPORTUSER", sequenceName = "SEQ_ARPIS_TP_EMAIL_USUARIO",
+	@SequenceGenerator(schema = "REPORTUSER", sequenceName = "SEQ_AP_EMAIL_TD_USUARIOS",
 		allocationSize = 1, name = "SEQ_USUARIO")
 	@Column(name = "ID", nullable = false)
-	private Long id;
+	private Short id;
 
 	@Column(name = "LOGIN", nullable = false)
 	private String login;

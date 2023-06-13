@@ -14,10 +14,10 @@ import cl.arpis.correo.dto.UsuarioDto;
  */
 public interface CorreosRepository {
 
+	Optional<UsuarioDto> buscarUsuario(String usuario);
+
 	List<CorreoDto> buscarCorreos(Long idProyecto);
 
 	List<CorreoDto> buscarCorreos(Long idProyecto, String error);
-
-	Optional<UsuarioDto> buscarUsuario(String usuario);
 
 }

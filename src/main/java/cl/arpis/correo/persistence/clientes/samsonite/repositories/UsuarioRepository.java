@@ -13,7 +13,7 @@ import cl.arpis.correo.persistence.clientes.samsonite.entities.UsuarioEntity;
  *
  */
 @Profile("samsonite")
-public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
+public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Short> {
 
 	Optional<UsuarioEntity> findByLogin(String login);
 

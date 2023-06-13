@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -27,17 +29,20 @@ public class ProyectoCorreoEntity {
 	@Column(name = "ID", nullable = false)
 	private Long id;
 
-	@Column(name = "ID_PROYECTO", nullable = false)
-	private Integer idProyecto;
-
-	@Column(name = "ID_CORREO", nullable = false)
-	private Integer idCorreo;
-
-	@Column(name = "ID_TIPO_ENVIO", nullable = false)
-	private Short idTipoEnvio;
-
 	@Column(name = "FECHA_CREACION", nullable = false)
 	@CreationTimestamp
 	private Date fechaCreacion;
+
+	@ManyToOne
+	@JoinColumn(name = "ID_PROYECTO", nullable = false, updatable = true, insertable = true)
+	private ProyectoEntity proyecto;
+
+	@ManyToOne
+	@JoinColumn(name = "ID_CORREO", nullable = false, updatable = true, insertable = true)
+	private CorreoEntity correo;
+
+	@ManyToOne
+	@JoinColumn(name = "ID_TIPO_ENVIO", nullable = false, updatable = true, insertable = true)
+	private TipoEnvioEntity tipoEnvio;
 
 }

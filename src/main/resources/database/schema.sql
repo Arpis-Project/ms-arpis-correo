@@ -191,3 +191,10 @@ CREATE TABLE REPORTUSER.AP_EMAIL_TD_USUARIOS (
   URL_INTEGRACION VARCHAR(255),
   PRIMARY KEY (ID)
 );
+
+--===============================================================================
+--===============================================================================
+--===============================================================================
+
+INSERT INTO REPORTUSER.AP_EMAIL_TD_USUARIOS (LOGIN,PASSWORD,NOMBRE_EMPRESA,ACTIVO,FECHA_CREACION,FECHA_MODIFICACION,URL_INTEGRACION)
+VALUES('david', 'pass', 'david spa', 'S', SYSDATE, SYSDATE, 'URL' )
