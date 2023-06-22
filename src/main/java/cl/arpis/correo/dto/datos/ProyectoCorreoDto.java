@@ -3,6 +3,7 @@ package cl.arpis.correo.dto.datos;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -32,6 +33,7 @@ public class ProyectoCorreoDto implements Serializable {
 	private static final long serialVersionUID = 596505227003887719L;
 
 	private Long id;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date fechaCreacion;
 	private EtapaProyectoDto etapa;
 	private CorreoDto correo;

@@ -28,7 +28,7 @@ public class CorreoController {
 	@PostMapping(path = "/envio",
 			produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<RespuestaDto> enviarCorreo(
-			@RequestBody @Valid MensajeDto correo) {
+			@RequestBody(required = true) @Valid MensajeDto correo) {
 		RespuestaDto resp = this.correoService.enviarCorreo(correo);
 		return ResponseEntity.ok(resp);
 	}

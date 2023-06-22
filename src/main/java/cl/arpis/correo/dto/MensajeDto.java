@@ -28,14 +28,13 @@ public class MensajeDto implements Serializable {
 	private static final long serialVersionUID = 6955170255384965705L;
 	@NotNull
 	private Integer proyecto;
-	private Long idEtapa;
-	private Short codError;
 	@NotNull
+	private Long idEtapa;
 	@NotEmpty
 	private String asunto;
-	@NotNull
 	@NotEmpty
 	private String mensaje;
+	private Short codError;
 	private List<CasosDto> listaCasos;
 
 }
