@@ -95,7 +95,7 @@ public class EmailServiceImpl implements EmailService {
 		}
 		// CCO
 		if(!receptoresCCO.isEmpty()) {
-			emailMessage.setCc(receptoresCCO.stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
+			emailMessage.setBcc(receptoresCCO.stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
 		}
 		emailMessage.setSubject(correo.getAsunto());
 		emailMessage.setText(String.format("%s\n%s", correo.getMensaje(), mensaje.getMensaje()));
