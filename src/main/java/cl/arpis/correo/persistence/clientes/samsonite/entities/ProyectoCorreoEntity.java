@@ -34,15 +34,15 @@ public class ProyectoCorreoEntity {
 	private Date fechaCreacion;
 
 	@ManyToOne
-	@JoinColumn(name = "ID_PROYECTO", nullable = false, updatable = true, insertable = true)
-	private ProyectoEntity proyecto;
+	@JoinColumn(name = "ID_ETAPA_PROYECTO", nullable = false, updatable = true, insertable = true)
+	private EtapaProyectoEntity etapa;
 
 	@ManyToOne
 	@JoinColumn(name = "ID_CORREO", nullable = false, updatable = true, insertable = true)
 	private CorreoEntity correo;
 
 	@ManyToOne
-	@JoinColumn(name = "ID_TIPO_ENVIO", nullable = false, updatable = true, insertable = true)
-	private TipoEnvioEntity tipoEnvio;
+	@JoinColumn(name = "ID_TIPO_CORREO", nullable = false, updatable = true, insertable = true)
+	private TipoCorreoEntity tipoCorreo;
 
 }

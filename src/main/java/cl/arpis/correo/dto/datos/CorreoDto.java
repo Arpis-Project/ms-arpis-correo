@@ -38,6 +38,7 @@ public class CorreoDto implements Serializable {
 	@JsonIgnore
 	private String pasword;
 	private ActivoEnum activo;
-	private TipoCorreoDto tipoCorreo;
+	@JsonIgnore
+	private ProyectoDto proyecto;
 
 }

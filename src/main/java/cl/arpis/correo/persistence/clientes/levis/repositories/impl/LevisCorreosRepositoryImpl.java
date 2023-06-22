@@ -35,6 +35,12 @@ public class LevisCorreosRepositoryImpl implements CorreosRepository {
 	}
 
 	@Override
+	public List<ProyectoCorreoDto> obtenerProyectoCorreo(Integer idProyecto, Long idEtapa) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public List<ProyectoErrorDto> obtenerProyectoErrorPorTipo(Integer idProyecto, Short idTipoError) {
 		// TODO Auto-generated method stub
 		return null;

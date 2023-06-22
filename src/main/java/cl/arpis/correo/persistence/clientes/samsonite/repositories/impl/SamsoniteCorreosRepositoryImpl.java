@@ -32,6 +32,7 @@ public class SamsoniteCorreosRepositoryImpl implements CorreosRepository {
 
 	private UsuarioRepository usuariosRepository;
 	private ProyectoCorreoRepository proyectoCorreoRepository;
+	@Deprecated
 	private ProyectoErrorRepository proyectoErrorRepository;
 
 	public SamsoniteCorreosRepositoryImpl(UsuarioRepository usuariosRepository,
@@ -53,7 +54,7 @@ public class SamsoniteCorreosRepositoryImpl implements CorreosRepository {
 
 	@Override
 	public List<ProyectoCorreoDto> obtenerProyectoCorreo(final Integer idProyecto) {
-		final List<ProyectoCorreoEntity> proyectoInfo = this.proyectoCorreoRepository.findByProyecto_Id(idProyecto);
+		final List<ProyectoCorreoEntity> proyectoInfo = this.proyectoCorreoRepository.findByEtapa_Proyecto_Id(idProyecto);
 		if(proyectoInfo.isEmpty()) {
 			return new ArrayList<>();
 		}
@@ -61,6 +62,17 @@ public class SamsoniteCorreosRepositoryImpl implements CorreosRepository {
 	}
 
 	@Override
+	public List<ProyectoCorreoDto> obtenerProyectoCorreo(final Integer idProyecto, final Long idEtapa) {
+		final List<ProyectoCorreoEntity> proyectoInfo = this.proyectoCorreoRepository
+				.findByEtapa_Proyecto_IdAndEtapa_Id(idProyecto, idEtapa);
+		if(proyectoInfo.isEmpty()) {
+			return new ArrayList<>();
+		}
+		return MapperUtils.listToList(proyectoInfo, ProyectoCorreoDto.class);
+	}
+
+	@Override
+	@Deprecated
 	public List<ProyectoErrorDto> obtenerProyectoErrorPorTipo(final Integer idProyecto, final Short idTipoError) {
 		final List<ProyectoErrorEntity> proyectoInfo = this.proyectoErrorRepository.findByProyecto_IdAndTipoError_Id(idProyecto, idTipoError);
 		if(proyectoInfo.isEmpty()) {

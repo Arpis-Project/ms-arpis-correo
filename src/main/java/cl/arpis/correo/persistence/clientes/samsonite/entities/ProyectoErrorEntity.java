@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 @Table(schema = "REPORTUSER", name = "AP_EMAIL_TD_PROY_ERROR")
 @Data
 @NoArgsConstructor
+@Deprecated
 public class ProyectoErrorEntity {
 
 	@Id
@@ -43,7 +44,7 @@ public class ProyectoErrorEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "ID_TIPO_ENVIO", nullable = false, updatable = true, insertable = true)
-	private TipoEnvioEntity tipoEnvio;
+	private EtapaProyectoEntity tipoEnvio;
 
 	@ManyToOne
 	@JoinColumn(name = "ID_TIPO_ERROR", nullable = false, updatable = true, insertable = true)

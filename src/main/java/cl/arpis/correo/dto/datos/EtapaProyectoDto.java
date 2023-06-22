@@ -24,16 +24,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude(Include.NON_NULL)
-public class TipoEnvioDto implements Serializable {
+public class EtapaProyectoDto implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -443845126960419237L;
 
-	private Short id;
+	private Long id;
 	private String nombre;
 	private String descripcion;
 	private ActivoEnum activo;
+	private ProyectoDto proyecto;
 
 }

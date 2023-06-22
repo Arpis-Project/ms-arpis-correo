@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @Table(schema = "REPORTUSER", name = "AP_EMAIL_TP_TIPO_ERROR")
 @Data
 @NoArgsConstructor
+@Deprecated
 public class TipoErrorEntity {
 
 	@Id

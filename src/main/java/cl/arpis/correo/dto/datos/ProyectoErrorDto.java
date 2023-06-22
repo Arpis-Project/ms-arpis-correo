@@ -35,7 +35,7 @@ public class ProyectoErrorDto implements Serializable {
 	private Date fechaCreacion;
 	private ProyectoDto proyecto;
 	private CorreoDto correo;
-	private TipoEnvioDto tipoEnvio;
+	private EtapaProyectoDto tipoEnvio;
 	private TipoErrorDto tipoError;
 
 }

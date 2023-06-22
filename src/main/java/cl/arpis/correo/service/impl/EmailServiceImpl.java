@@ -48,49 +48,49 @@ public class EmailServiceImpl implements EmailService {
 	public void enviarEmail(final MensajeDto correo, final MensajeEmailDto mensaje,
 			final ContenedorCorreoDto contCorreos) {
 		// Obtener casillas
-		final Optional<CorreoDto> emisor = contCorreos.getListaCorreo().stream()
-				.filter(a -> a.getNombre() .equals("DE"))
-				.findFirst();
-		if(emisor.isEmpty()) {
-			log.error(String.format("Sin cuenta de servicio para conectarse al SMTP: Mensaje %s", mensaje.toString()));
-			throw new CorreoException("Sin cuenta de servicio para conectarse al SMTP");
-		}
-		final List<CorreoDto> receptores = contCorreos.getListaCorreo().stream()
-				.filter(a -> a.getNombre().equals("PARA"))
-				.collect(Collectors.toList());
-		if(receptores.isEmpty()) {
-			log.error(String.format("Correo sin receptores: Mensaje %s", mensaje.toString()));
-			throw new CorreoException("Correo sin receptores");
-		}
-		final List<CorreoDto> receptoresCC = contCorreos.getListaCorreo().stream()
-				.filter(a -> a.getNombre().equals("CC"))
-				.collect(Collectors.toList());
-		// Configuracion SMTP
-		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-		mailSender.setUsername(emisor.get().getEmail());
-		mailSender.setPassword(emisor.get().getPasword());
-		mailSender.setHost(this.env.getProperty("arpis.mail.smtp.host"));
-		mailSender.setPort(Integer.valueOf(this.env.getProperty("arpis.mail.smtp.port")));
-		mailSender.setProtocol(this.env.getProperty("arpis.mail.transport.protocol"));
-		Properties props = mailSender.getJavaMailProperties();
-		props.put("mail.smtp.auth", this.env.getProperty("arpis.mail.smtp.auth"));
-		props.put("mail.smtp.starttls.enable", this.env.getProperty("arpis.mail.smtp.starttls.enable"));
-		props.put("mail.smtp.ssl.protocols", this.env.getProperty("arpis.mail.smtp.ssl.protocols"));
-		props.put("mail.debug", this.env.getProperty("arpis.mail.debug"));
-		props.put("mail.encoding", this.env.getProperty("arpis.mail.encoding"));
-		// Crear mensaje
-		final SimpleMailMessage emailMessage = new SimpleMailMessage();
-		emailMessage.setFrom(emisor.get().getEmail());
-		final StringBuilder sb = new StringBuilder();
-		receptores.stream().map(r -> r.getEmail().trim().concat(",")).forEach(sb::append);
-		emailMessage.setTo(sb.toString());
-		sb.delete(0, sb.length());
-		receptoresCC.stream().map(r -> r.getEmail().trim().concat(",")).forEach(sb::append);
-		emailMessage.setCc(sb.toString());
-		emailMessage.setSubject(correo.getAsunto());
-		emailMessage.setText(String.format("%s\n%s", correo.getMensaje(), mensaje.getMensaje()));
-		// Enviar correo
-		mailSender.send(emailMessage);
+//		final Optional<CorreoDto> emisor = contCorreos.getListaCorreo().stream()
+//				.filter(a -> a.getNombre() .equals("DE"))
+//				.findFirst();
+//		if(emisor.isEmpty()) {
+//			log.error(String.format("Sin cuenta de servicio para conectarse al SMTP: Mensaje %s", mensaje.toString()));
+//			throw new CorreoException("Sin cuenta de servicio para conectarse al SMTP");
+//		}
+//		final List<CorreoDto> receptores = contCorreos.getListaCorreo().stream()
+//				.filter(a -> a.getNombre().equals("PARA"))
+//				.collect(Collectors.toList());
+//		if(receptores.isEmpty()) {
+//			log.error(String.format("Correo sin receptores: Mensaje %s", mensaje.toString()));
+//			throw new CorreoException("Correo sin receptores");
+//		}
+//		final List<CorreoDto> receptoresCC = contCorreos.getListaCorreo().stream()
+//				.filter(a -> a.getNombre().equals("CC"))
+//				.collect(Collectors.toList());
+//		// Configuracion SMTP
+//		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+//		mailSender.setUsername(emisor.get().getEmail());
+//		mailSender.setPassword(emisor.get().getPasword());
+//		mailSender.setHost(this.env.getProperty("arpis.mail.smtp.host"));
+//		mailSender.setPort(Integer.valueOf(this.env.getProperty("arpis.mail.smtp.port")));
+//		mailSender.setProtocol(this.env.getProperty("arpis.mail.transport.protocol"));
+//		Properties props = mailSender.getJavaMailProperties();
+//		props.put("mail.smtp.auth", this.env.getProperty("arpis.mail.smtp.auth"));
+//		props.put("mail.smtp.starttls.enable", this.env.getProperty("arpis.mail.smtp.starttls.enable"));
+//		props.put("mail.smtp.ssl.protocols", this.env.getProperty("arpis.mail.smtp.ssl.protocols"));
+//		props.put("mail.debug", this.env.getProperty("arpis.mail.debug"));
+//		props.put("mail.encoding", this.env.getProperty("arpis.mail.encoding"));
+//		// Crear mensaje
+//		final SimpleMailMessage emailMessage = new SimpleMailMessage();
+//		emailMessage.setFrom(emisor.get().getEmail());
+//		final StringBuilder sb = new StringBuilder();
+//		receptores.stream().map(r -> r.getEmail().trim().concat(",")).forEach(sb::append);
+//		emailMessage.setTo(sb.toString());
+//		sb.delete(0, sb.length());
+//		receptoresCC.stream().map(r -> r.getEmail().trim().concat(",")).forEach(sb::append);
+//		emailMessage.setCc(sb.toString());
+//		emailMessage.setSubject(correo.getAsunto());
+//		emailMessage.setText(String.format("%s\n%s", correo.getMensaje(), mensaje.getMensaje()));
+//		// Enviar correo
+//		mailSender.send(emailMessage);
 	}
 
 }

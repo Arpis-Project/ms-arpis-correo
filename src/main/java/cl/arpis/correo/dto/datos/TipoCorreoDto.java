@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import cl.arpis.correo.enums.ActivoEnum;
+import cl.arpis.correo.enums.TipoCorreoEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,7 +33,7 @@ public class TipoCorreoDto implements Serializable {
 	private static final long serialVersionUID = -1578053451819758352L;
 
 	private Short id;
-	private String nombre;
+	private TipoCorreoEnum nombre;
 	private String descripcion;
 	private ActivoEnum activo;
 

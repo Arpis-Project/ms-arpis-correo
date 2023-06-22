@@ -69,4 +69,10 @@ public class FuenzalidaCorreosRepositoryImpl implements CorreosRepository {
 		return MapperUtils.listToList(proyectoInfo, ProyectoErrorDto.class);
 	}
 
+	@Override
+	public List<ProyectoCorreoDto> obtenerProyectoCorreo(Integer idProyecto, Long idEtapa) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

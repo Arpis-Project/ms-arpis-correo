@@ -15,6 +15,8 @@ import cl.arpis.correo.persistence.clientes.samsonite.entities.ProyectoCorreoEnt
 @Profile("samsonite")
 public interface ProyectoCorreoRepository extends JpaRepository<ProyectoCorreoEntity, Long>  {
 
-	List<ProyectoCorreoEntity> findByProyecto_Id(Integer idProyecto);
+	List<ProyectoCorreoEntity> findByEtapa_Proyecto_Id(Integer idProyecto);
+
+	List<ProyectoCorreoEntity> findByEtapa_Proyecto_IdAndEtapa_Id(Integer idProyecto, Long idEtapa);
 
 }

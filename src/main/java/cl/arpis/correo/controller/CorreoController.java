@@ -40,6 +40,15 @@ public class CorreoController {
 		return ResponseEntity.ok(this.serviceCorreo.buscarCorreos(idProyecto));
 	}
 
+	@GetMapping(path = "/proyecto/{id_proyecto}/etapas/{id_etapa}",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ContenedorCorreoDto> listarCorreos(
+			@PathVariable(name = "id_proyecto", required = true) Integer idProyecto,
+			@PathVariable(name = "id_etapa", required = true) Long idEtapa) {
+		return ResponseEntity.ok(this.serviceCorreo.buscarCorreos(idProyecto, idEtapa));
+	}
+
+	@Deprecated
 	@GetMapping(path = "/proyecto/{id}/error/{error}",
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ContenedorCorreoDto> listarCorreos(

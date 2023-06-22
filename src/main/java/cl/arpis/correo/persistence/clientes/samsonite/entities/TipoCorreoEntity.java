@@ -1,6 +1,7 @@
 package cl.arpis.correo.persistence.clientes.samsonite.entities;
 
 import cl.arpis.correo.enums.ActivoEnum;
+import cl.arpis.correo.enums.TipoCorreoEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,7 +28,8 @@ public class TipoCorreoEntity {
 	private Short id;
 
 	@Column(name = "NOMBRE", nullable = false)
-	private String nombre;
+	@Enumerated(EnumType.STRING)
+	private TipoCorreoEnum nombre;
 
 	@Column(name = "DESCRIPCION")
 	private String descripcion;

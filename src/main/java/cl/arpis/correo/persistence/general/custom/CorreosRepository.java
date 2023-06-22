@@ -18,7 +18,10 @@ public interface CorreosRepository {
 	Optional<UsuarioDto> buscarUsuario(String usuario);
 
 	List<ProyectoCorreoDto> obtenerProyectoCorreo(Integer idProyecto);
-	
+
+	List<ProyectoCorreoDto> obtenerProyectoCorreo(Integer idProyecto, Long idEtapa);
+
+	@Deprecated
 	List<ProyectoErrorDto> obtenerProyectoErrorPorTipo(Integer idProyecto, Short idTipoError);
 
 }

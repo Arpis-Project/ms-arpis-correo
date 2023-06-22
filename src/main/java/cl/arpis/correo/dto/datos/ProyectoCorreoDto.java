@@ -33,8 +33,8 @@ public class ProyectoCorreoDto implements Serializable {
 
 	private Long id;
 	private Date fechaCreacion;
-	private ProyectoDto proyecto;
+	private EtapaProyectoDto etapa;
 	private CorreoDto correo;
-	private TipoEnvioDto tipoEnvio;
+	private TipoCorreoDto tipoCorreo;
 
 }

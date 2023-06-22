@@ -11,10 +11,12 @@ import cl.arpis.correo.dto.RespuestaDto;
  */
 public interface CorreoService {
 
-	public RespuestaDto enviarCorreo(MensajeDto correo);
+	RespuestaDto enviarCorreo(MensajeDto correo);
 
-	public ContenedorCorreoDto buscarCorreos(Integer idProyecto);
+	ContenedorCorreoDto buscarCorreos(Integer idProyecto);
 
-	public ContenedorCorreoDto buscarCorreos(Integer idProyecto, Short idTipoError);
+	ContenedorCorreoDto buscarCorreos(Integer idProyecto, Long idEtapa);
+
+	ContenedorCorreoDto buscarCorreos(Integer idProyecto, Short idTipoError);
 
 }

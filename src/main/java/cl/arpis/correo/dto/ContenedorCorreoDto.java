@@ -8,7 +8,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
-import cl.arpis.correo.dto.datos.CorreoDto;
+import cl.arpis.correo.dto.datos.ProyectoCorreoDto;
+import cl.arpis.correo.dto.datos.ProyectoErrorDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,6 +28,7 @@ public class ContenedorCorreoDto implements Serializable {
 	 */
 	private static final long serialVersionUID = -2993733803645325855L;
 
-	private List<CorreoDto> listaCorreo;
+	private List<ProyectoCorreoDto> listaCorreo;
+	private List<ProyectoErrorDto> listaCorreoError;
 
 }

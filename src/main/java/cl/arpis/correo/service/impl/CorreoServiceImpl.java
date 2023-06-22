@@ -49,19 +49,39 @@ public class CorreoServiceImpl implements CorreoService {
 		List<ProyectoCorreoDto> listaDatos = this.correoRepository.obtenerProyectoCorreo(idProyecto);
 		listaDatos = listaDatos.stream()
 			.filter(d -> ActivoEnum.S.equals(d.getCorreo().getActivo()))
-			.filter(d -> ActivoEnum.S.equals(d.getProyecto().getActivo()))
-			.filter(d -> ActivoEnum.S.equals(d.getTipoEnvio().getActivo()))
+			.filter(d -> ActivoEnum.S.equals(d.getEtapa().getActivo()))
+			.filter(d -> ActivoEnum.S.equals(d.getEtapa().getProyecto().getActivo()))
+			.filter(d -> ActivoEnum.S.equals(d.getTipoCorreo().getActivo()))
 			.toList();
 		if(listaDatos.isEmpty()) {
 			log.error(String.format("Sin correos para proyecto: %s", idProyecto));
 			throw new CorreoException(String.format("Sin correos para proyecto: %s", idProyecto));
 		}
 		return ContenedorCorreoDto.builder()
-				.listaCorreo(listaDatos.stream().map(ProyectoCorreoDto::getCorreo).toList())
+				.listaCorreo(listaDatos)
 				.build();
 	}
 
 	@Override
+	public ContenedorCorreoDto buscarCorreos(final Integer idProyecto, final Long idEtapa) {
+		List<ProyectoCorreoDto> listaDatos = this.correoRepository.obtenerProyectoCorreo(idProyecto, idEtapa);
+		listaDatos = listaDatos.stream()
+			.filter(d -> ActivoEnum.S.equals(d.getCorreo().getActivo()))
+			.filter(d -> ActivoEnum.S.equals(d.getEtapa().getActivo()))
+			.filter(d -> ActivoEnum.S.equals(d.getEtapa().getProyecto().getActivo()))
+			.filter(d -> ActivoEnum.S.equals(d.getTipoCorreo().getActivo()))
+			.toList();
+		if(listaDatos.isEmpty()) {
+			log.error(String.format("Sin correos para proyecto: %s", idProyecto));
+			throw new CorreoException(String.format("Sin correos para proyecto: %s", idProyecto));
+		}
+		return ContenedorCorreoDto.builder()
+				.listaCorreo(listaDatos)
+				.build();
+	}
+
+	@Override
+	@Deprecated
 	public ContenedorCorreoDto buscarCorreos(Integer idProyecto, Short idTipoError) {
 		List<ProyectoErrorDto> listaDatos = this.correoRepository.obtenerProyectoErrorPorTipo(idProyecto, idTipoError);
 		listaDatos = listaDatos.stream()
@@ -75,7 +95,7 @@ public class CorreoServiceImpl implements CorreoService {
 			throw new CorreoException(String.format("Sin correos para proyecto: %s", idProyecto));
 		}
 		return ContenedorCorreoDto.builder()
-				.listaCorreo(listaDatos.stream().map(ProyectoErrorDto::getCorreo).toList())
+				.listaCorreoError(listaDatos)
 				.build();
 	}
 

@@ -8,23 +8,25 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(schema = "REPORTUSER", name = "AP_EMAIL_TP_TIPO_ENVIO")
+@Table(schema = "REPORTUSER", name = "AP_EMAIL_TD_ETAPAS_PROYECTO")
 @Data
 @NoArgsConstructor
-public class TipoEnvioEntity {
+public class EtapaProyectoEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TIPO_ENVIO")
-	@SequenceGenerator(schema = "REPORTUSER", sequenceName = "SEQ_AP_EMAIL_TP_TIPO_ENVIO",
-		allocationSize = 1, name = "SEQ_TIPO_ENVIO")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ETAPAS_PROYECTO")
+	@SequenceGenerator(schema = "REPORTUSER", sequenceName = "SEQ_AP_EMAIL_TD_ETAPAS_PROYECTO",
+		allocationSize = 1, name = "SEQ_ETAPAS_PROYECTO")
 	@Column(name = "ID", nullable = false)
-	private Short id;
+	private Long id;
 
 	@Column(name = "NOMBRE", nullable = false)
 	private String nombre;
@@ -35,5 +37,9 @@ public class TipoEnvioEntity {
 	@Column(name = "ACTIVO", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private ActivoEnum activo;
+
+	@ManyToOne
+	@JoinColumn(name = "ID_PROYECTO", nullable = false, updatable = true, insertable = true)
+	private ProyectoEntity proyecto;
 
 }
