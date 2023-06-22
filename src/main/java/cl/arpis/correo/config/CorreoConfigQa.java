@@ -6,11 +6,11 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 @Configuration
-@Profile("prod")
+@Profile("qa")
 @PropertySources({
-	@PropertySource("classpath:mail-prod.properties"),
-	@PropertySource("classpath:db-prod.properties")
+	@PropertySource("classpath:mail-qa.properties"),
+	@PropertySource("classpath:db-qa.properties")
 })
-public class CorreoConfigProd {
+public class CorreoConfigQa {
 
 }

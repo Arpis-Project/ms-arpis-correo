@@ -1,4 +1,4 @@
-package cl.arpis.correo.controller.handler;
+package cl.arpis.correo.controllers.handler;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;

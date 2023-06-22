@@ -3,6 +3,7 @@ package cl.arpis.correo.service.impl;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import cl.arpis.correo.dto.ContenedorCorreoDto;
 import cl.arpis.correo.dto.MensajeDto;
@@ -32,10 +33,10 @@ public class CorreoServiceImpl implements CorreoService {
 	@Override
 	public RespuestaDto enviarCorreo(final MensajeDto correo) {
 		ContenedorCorreoDto contCorreo = null;
-		if(null == correo.getCodError()) {
-			contCorreo = buscarCorreos(correo.getProyecto());
+		if(ObjectUtils.isEmpty(correo.getCodError())) {
+			contCorreo = buscarCorreos(correo.getProyecto(), correo.getIdEtapa());
 		} else {
-			contCorreo = buscarCorreos(correo.getProyecto(),correo.getCodError());
+			contCorreo = buscarCorreos(correo.getProyecto(), correo.getCodError());
 		}
 		this.mailService.enviarResultados(correo, contCorreo);
 		return RespuestaDto.builder()

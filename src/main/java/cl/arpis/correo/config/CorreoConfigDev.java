@@ -8,7 +8,7 @@ import org.springframework.context.annotation.PropertySources;
 @Configuration
 @Profile("dev")
 @PropertySources({
-	@PropertySource("classpath:mail.properties"),
+	@PropertySource("classpath:mail-dev.properties"),
 	@PropertySource("classpath:db-dev.properties")
 })
 public class CorreoConfigDev {
