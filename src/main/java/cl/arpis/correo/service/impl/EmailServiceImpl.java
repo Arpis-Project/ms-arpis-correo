@@ -1,5 +1,6 @@
 package cl.arpis.correo.service.impl;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -8,15 +9,23 @@ import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.ITemplateEngine;
+import org.thymeleaf.context.Context;
 
 import cl.arpis.correo.dto.ContenedorCorreoDto;
 import cl.arpis.correo.dto.MensajeDto;
 import cl.arpis.correo.dto.MensajeEmailDto;
 import cl.arpis.correo.dto.datos.CorreoDto;
 import cl.arpis.correo.enums.TipoCorreoEnum;
+import cl.arpis.correo.exceptions.ArpisException;
 import cl.arpis.correo.exceptions.CorreoException;
+import cl.arpis.correo.persistence.clientes.samsonite.entities.TemplateEntity;
+import cl.arpis.correo.persistence.clientes.samsonite.repositories.TemplateRepository;
 import cl.arpis.correo.service.EmailService;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -24,9 +33,15 @@ import lombok.extern.slf4j.Slf4j;
 public class EmailServiceImpl implements EmailService {
 
 	private Environment env;
+	private TemplateRepository templateRepository;
+	private ITemplateEngine templateEngine;
 
-	public EmailServiceImpl(Environment env) {
+	public EmailServiceImpl(Environment env,
+			TemplateRepository templateRepository,
+			ITemplateEngine templateEngine) {
 		this.env = env;
+		this.templateRepository = templateRepository;
+		this.templateEngine = templateEngine;
 	}
 
 	@Override
@@ -49,6 +64,18 @@ public class EmailServiceImpl implements EmailService {
 	public void enviarEmail(final MensajeDto correo, final MensajeEmailDto mensaje,
 			final ContenedorCorreoDto contCorreos) {
 		// Obtener casillas
+		final CorreosEnvioDTO envio = this.clasificarCorreos(contCorreos, mensaje);
+		// Obtener template
+		final Optional<TemplateEntity> template = this.templateRepository.findById(envio.getIdTemplate());
+		if(template.isPresent()) {
+			this.enviarConTemplate(envio, correo, mensaje, template.get());
+		} else {
+			this.enviarSinTemplate(envio, correo, mensaje);
+		}
+	}
+
+	private CorreosEnvioDTO clasificarCorreos(final ContenedorCorreoDto contCorreos,
+			final MensajeEmailDto mensaje) {
 		final Optional<CorreoDto> servicio = contCorreos.getListaCorreo().stream()
 				.filter(c -> TipoCorreoEnum.SERVICIO.equals(c.getTipoCorreo().getNombre()))
 				.map(c -> c.getCorreo())
@@ -81,28 +108,71 @@ public class EmailServiceImpl implements EmailService {
 				.filter(c -> TipoCorreoEnum.CCO.equals(c.getTipoCorreo().getNombre()))
 				.map(c -> c.getCorreo())
 				.toList();
+		return CorreosEnvioDTO.builder()
+				.idTemplate(contCorreos.getListaCorreo().stream()
+						.findFirst().get().getIdTemplate())
+				.servicio(servicio.get())
+				.emisor(emisor.get())
+				.receptores(receptores)
+				.receptoresCC(receptoresCC)
+				.receptoresCCO(receptoresCCO)
+				.build();
+	}
+
+	private void enviarSinTemplate(final CorreosEnvioDTO envio, final MensajeDto correo, final MensajeEmailDto mensaje) {
 		/*
 		 * Crear mensaje
 		 */
 		final SimpleMailMessage emailMessage = new SimpleMailMessage();
 		// FROM
-		emailMessage.setFrom(emisor.get().getEmail());
+		emailMessage.setFrom(envio.getEmisor().getEmail());
 		// TO
-		emailMessage.setTo(receptores.stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
+		emailMessage.setTo(envio.getReceptores().stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
 		// CC
-		if(!receptoresCC.isEmpty()) {
-			emailMessage.setCc(receptoresCC.stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
+		if(!envio.getReceptoresCC().isEmpty()) {
+			emailMessage.setCc(envio.getReceptoresCC().stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
 		}
 		// CCO
-		if(!receptoresCCO.isEmpty()) {
-			emailMessage.setBcc(receptoresCCO.stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
+		if(!envio.getReceptoresCCO().isEmpty()) {
+			emailMessage.setBcc(envio.getReceptoresCCO().stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
 		}
 		emailMessage.setSubject(correo.getAsunto());
 		emailMessage.setText(String.format("%s\n%s", correo.getMensaje(), mensaje.getMensaje()));
 		// Configuracion SMTP
-		final JavaMailSender mailSender = this.crearSender(servicio.get());
+		final JavaMailSender mailSender = this.crearSender(envio.getServicio());
 		// Enviar correo
 		mailSender.send(emailMessage);
+	}
+
+	private void enviarConTemplate(final CorreosEnvioDTO envio, final MensajeDto correo, final MensajeEmailDto mensaje,
+			final TemplateEntity template) {
+		// Configuracion SMTP
+		final JavaMailSender mailSender = this.crearSender(envio.getServicio());
+		final MimeMessage emailMessage = mailSender.createMimeMessage();
+		try {
+			MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(emailMessage,
+					MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+			mimeMessageHelper.setSubject(correo.getAsunto());
+			mimeMessageHelper.setFrom(envio.getEmisor().getEmail());
+			mimeMessageHelper.setTo(envio.getReceptores().stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
+			// CC
+			if(!envio.getReceptoresCC().isEmpty()) {
+				mimeMessageHelper.setCc(envio.getReceptoresCC().stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
+			}
+			// CCO
+			if(!envio.getReceptoresCCO().isEmpty()) {
+				mimeMessageHelper.setBcc(envio.getReceptoresCCO().stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
+			}
+			// Configurar template
+			final Context contexto = new Context();
+			template.getVariables().stream()
+				.forEach(v -> contexto.setVariable(v.getNombre(), v.getValor()));
+			mimeMessageHelper.setText(this.templateEngine.process(template.getContenido(), contexto), true);
+			// Enviar correo
+			mailSender.send(emailMessage);
+		} catch (MessagingException e) {
+			throw new ArpisException("", e);
+		}
 	}
 
 	private JavaMailSender crearSender(final CorreoDto servicio) {

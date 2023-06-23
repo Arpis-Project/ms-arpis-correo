@@ -13,6 +13,7 @@ import cl.arpis.correo.persistence.clientes.samsonite.entities.ProyectoErrorEnti
  *
  */
 @Profile("samsonite")
+@Deprecated
 public interface ProyectoErrorRepository extends JpaRepository<ProyectoErrorEntity, Long> {
 
 	List<ProyectoErrorEntity> findByProyecto_IdAndTipoError_Id(Integer idProyecto, Short idTipoError);
