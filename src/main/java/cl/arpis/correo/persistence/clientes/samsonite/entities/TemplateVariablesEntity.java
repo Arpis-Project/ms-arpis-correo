@@ -28,6 +28,9 @@ public class TemplateVariablesEntity {
 	@Column(name = "ID", nullable = false)
 	private Long id;
 
+	@Column(name = "ID_TEMPLATE", nullable = false)
+	private Integer idTemplate;
+
 	@Column(name = "NOMBRE", nullable = false)
 	private String nombre;
 

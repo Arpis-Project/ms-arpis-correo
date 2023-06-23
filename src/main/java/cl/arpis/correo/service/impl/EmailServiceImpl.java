@@ -1,5 +1,6 @@
 package cl.arpis.correo.service.impl;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -149,7 +150,8 @@ public class EmailServiceImpl implements EmailService {
 		final JavaMailSender mailSender = this.crearSender(envio.getServicio());
 		final MimeMessage emailMessage = mailSender.createMimeMessage();
 		try {
-			MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(emailMessage, true);
+			MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(emailMessage,
+					MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
 			mimeMessageHelper.setSubject(correo.getAsunto());
 			mimeMessageHelper.setFrom(envio.getEmisor().getEmail());
 			mimeMessageHelper.setTo(envio.getReceptores().stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
@@ -165,7 +167,7 @@ public class EmailServiceImpl implements EmailService {
 			final Context contexto = new Context();
 			template.getVariables().stream()
 				.forEach(v -> contexto.setVariable(v.getNombre(), v.getValor()));
-			mimeMessageHelper.setText(this.templateEngine.process(template.getContenido(), contexto));
+			mimeMessageHelper.setText(this.templateEngine.process(template.getContenido(), contexto), true);
 			// Enviar correo
 			mailSender.send(emailMessage);
 		} catch (MessagingException e) {

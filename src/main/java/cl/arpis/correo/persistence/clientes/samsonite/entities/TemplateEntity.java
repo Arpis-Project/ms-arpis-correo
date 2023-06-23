@@ -42,7 +42,7 @@ public class TemplateEntity {
 	@Enumerated(EnumType.STRING)
 	private ActivoEnum activo;
 
-	@OneToMany(mappedBy = "template", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "idTemplate", cascade = CascadeType.ALL)
 	private Set<TemplateVariablesEntity> variables;
 
 }
