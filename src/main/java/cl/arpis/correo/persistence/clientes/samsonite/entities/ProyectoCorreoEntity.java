@@ -33,6 +33,9 @@ public class ProyectoCorreoEntity {
 	@CreationTimestamp
 	private Date fechaCreacion;
 
+	@Column(name = "ID_TEMPLATE")
+	private Integer idTemplate;
+
 	@ManyToOne
 	@JoinColumn(name = "ID_ETAPA_PROYECTO", nullable = false, updatable = true, insertable = true)
 	private EtapaProyectoEntity etapa;

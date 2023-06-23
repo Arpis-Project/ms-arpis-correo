@@ -1,5 +1,7 @@
 package cl.arpis.correo.controllers;
 
+import java.util.Optional;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import cl.arpis.correo.dto.ContenedorCorreoDto;
 import cl.arpis.correo.dto.MensajeDto;
 import cl.arpis.correo.dto.RespuestaDto;
+import cl.arpis.correo.dto.datos.TemplateDTO;
 import cl.arpis.correo.service.CorreoService;
 import jakarta.validation.Valid;
 
@@ -55,6 +58,17 @@ public class CorreoController {
 			@PathVariable(name = "id", required = true) Integer idProyecto,
 			@PathVariable(name = "error", required = true) Short idTipoError) {
 		return ResponseEntity.ok(this.correoService.buscarCorreos(idProyecto, idTipoError));
+	}
+
+	@GetMapping(path = "/templates/{id_template}",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<TemplateDTO> obtenerTemplate(
+			@PathVariable(name = "id_template", required = true) Integer idTemplate) {
+		final Optional<TemplateDTO> template = this.correoService.obtenerTemplate(idTemplate);
+		if(template.isPresent()) {
+			return ResponseEntity.ok(template.get());
+		}
+		return ResponseEntity.noContent().build();
 	}
 
 }
