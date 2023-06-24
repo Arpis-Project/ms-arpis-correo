@@ -24,6 +24,7 @@ import cl.arpis.correo.exceptions.CorreoException;
 import cl.arpis.correo.persistence.clientes.samsonite.entities.TemplateEntity;
 import cl.arpis.correo.persistence.clientes.samsonite.repositories.TemplateRepository;
 import cl.arpis.correo.service.EmailService;
+import cl.arpis.correo.util.DateUtils;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -165,6 +166,8 @@ public class EmailServiceImpl implements EmailService {
 			}
 			// Configurar template
 			final Context contexto = new Context();
+			contexto.setVariable("year", DateUtils.obtenerAgno());
+			contexto.setVariable("nombre_destinatario", envio.getReceptores().stream().findFirst().get().getNombre());
 			template.getVariables().stream()
 				.forEach(v -> contexto.setVariable(v.getNombre(), v.getValor()));
 			mimeMessageHelper.setText(this.templateEngine.process(template.getContenido(), contexto), true);

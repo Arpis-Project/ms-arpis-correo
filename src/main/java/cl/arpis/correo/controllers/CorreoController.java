@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cl.arpis.correo.dto.ContenedorCorreoDto;
 import cl.arpis.correo.dto.MensajeDto;
-import cl.arpis.correo.dto.RespuestaDto;
 import cl.arpis.correo.dto.datos.TemplateDTO;
 import cl.arpis.correo.service.CorreoService;
 import jakarta.validation.Valid;
@@ -30,10 +29,10 @@ public class CorreoController {
 
 	@PostMapping(path = "/envio",
 			produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<RespuestaDto> enviarCorreo(
+	public ResponseEntity<Void> enviarCorreo(
 			@RequestBody(required = true) @Valid MensajeDto correo) {
-		RespuestaDto resp = this.correoService.enviarCorreo(correo);
-		return ResponseEntity.ok(resp);
+		this.correoService.enviarCorreo(correo);
+		return ResponseEntity.created(null).build();
 	}
 
 	@GetMapping(path = "/proyectos/{id}",
