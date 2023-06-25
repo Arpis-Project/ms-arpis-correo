@@ -1,0 +1,33 @@
+<service>
+	<!-- https://repo.jenkins-ci.org/releases/com/sun/winsw/winsw/ -->
+	<id>ArpisCorreos</id>
+	<name>Arpis - Servicio de envio de correos</name>
+	<description>Envio correos según configuración predeterminada</description>
+	<startmode>Automatic</startmode>
+	<delayedAutoStart>true</delayedAutoStart>
+	<interactive>false</interactive>
+	<depend>OracleServiceRproODS</depend>
+	<logpath>C:\ARPIS\Correos\win-service\winsw\logs</logpath>
+	<log mode="roll-by-time">
+		<pattern>yyyy-MM-dd</pattern>
+	</log>
+	<serviceaccount>
+		<username>LocalSystem</username>
+	</serviceaccount>
+	<workingdirectory>C:\ARPIS\Correos\win-service\winsw</workingdirectory>
+	<env name="SERVER_PORT" value="9000"/>
+	<env name="DB_ORACLE_JPA_DIALECT" value="org.hibernate.dialect.OracleDialect"/>
+	<env name="DB_ORACLE_HOST" value="localhost"/>
+	<env name="DB_ORACLE_PORT" value="1521"/> 
+	<env name="DB_ORACLE_PASSWORD" value=""/> <!-- Dato sensible-->
+	<env name="DB_ORACLE_USERNAME" value=""/> <!-- Dato sensible-->
+	<env name="DB_POSTGRES_HOST" value="localhost"/>
+	<env name="DB_POSTGRES_PORT" value="5432"/>
+	<env name="DB_POSTGRES_PASSWORD" value=""/> <!-- Dato sensible-->
+	<env name="DB_POSTGRES_USERNAME" value=""/> <!-- Dato sensible-->
+	<env name="LOGS_LEVEL" value="DEBUG"/>
+	<env name="LOGS_PATH" value="C:\ARPIS\Correos\logs"/>
+	<env name="SRV_TIMEZONE" value="America/Santiago"/>
+	<executable>C:\Program Files\Java\openjdk17\bin\java</executable>
+	<arguments>-Xmx256m -Xms128m -XX:MetaspaceSize=96m -XX:MaxMetaspaceSize=128m -Dspring.profiles.active=samsonite,qa -jar C:\ARPIS\Correos\ms-arpis-correo.jar"</arguments>
+</service>
