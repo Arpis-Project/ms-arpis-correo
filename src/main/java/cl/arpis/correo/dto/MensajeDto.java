@@ -32,7 +32,7 @@ public class MensajeDto implements Serializable {
 	@NotNull
 	private Long idEtapa;
 	@NotEmpty
-	@Size(max = 100)
+	@Size(max = 200)
 	private String asunto;
 	@Size(max = 500)
 	private String contenido;
