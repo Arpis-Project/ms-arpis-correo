@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -48,17 +49,6 @@ public class EmailServiceImpl implements EmailService {
 	@Override
 	public void enviarResultados(final MensajeDto correo, final ContenedorCorreoDto contCorreo) {
 		this.enviarEmail(correo, MensajeEmailDto.builder().mensaje("").build(), contCorreo);
-//		final StringBuilder sb = new StringBuilder();
-//		for(CasosDto proceso : correo.getListaCasos()) {
-//			// Por cada procesamiento, concatenar mensajes para enviar un solo correo
-//			sb.append(proceso.getDetalle());
-//			sb.append(": ");
-//			sb.append(proceso.getCaso());
-//			sb.append("\n");
-//		}
-//		if (sb.length() > 0) {
-//			this.enviarEmail(correo, MensajeEmailDto.builder().mensaje(sb.toString()).build(), contCorreo);
-//		}
 	}
 
 	@Override
@@ -138,7 +128,7 @@ public class EmailServiceImpl implements EmailService {
 			emailMessage.setBcc(envio.getReceptoresCCO().stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
 		}
 		emailMessage.setSubject(correo.getAsunto());
-		emailMessage.setText(String.format("%s\n%s", correo.getMensaje(), mensaje.getMensaje()));
+		emailMessage.setText(String.format("%s\n%s", correo.getContenido(), mensaje.getMensaje()));
 		// Configuracion SMTP
 		final JavaMailSender mailSender = this.crearSender(envio.getServicio());
 		// Enviar correo
@@ -166,10 +156,16 @@ public class EmailServiceImpl implements EmailService {
 			}
 			// Configurar template
 			final Context contexto = new Context();
+			// Variables bases
 			contexto.setVariable("year", DateUtils.obtenerAgno());
-			contexto.setVariable("nombre_destinatario", envio.getReceptores().stream().findFirst().get().getNombre());
 			template.getVariables().stream()
 				.forEach(v -> contexto.setVariable(v.getNombre(), v.getValor()));
+			// Variables de entrada
+			if(!ObjectUtils.isEmpty(correo.getContenido())) {
+				contexto.setVariable("contenido", correo.getContenido());
+			}
+			contexto.setVariable("nombre_destinatario", envio.getReceptores().stream().findFirst().get().getNombre());
+			// Generar HTML
 			mimeMessageHelper.setText(this.templateEngine.process(template.getContenido(), contexto), true);
 			// Enviar correo
 			mailSender.send(emailMessage);

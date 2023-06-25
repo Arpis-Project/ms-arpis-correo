@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,9 +32,10 @@ public class MensajeDto implements Serializable {
 	@NotNull
 	private Long idEtapa;
 	@NotEmpty
+	@Size(max = 100)
 	private String asunto;
-	@NotEmpty
-	private String mensaje;
+	@Size(max = 500)
+	private String contenido;
 	private Short codError;
 	private List<CasosDto> listaCasos;
 
