@@ -16,6 +16,8 @@
 	</serviceaccount>
 	<workingdirectory>C:\ARPIS\Correos\win-service\winsw</workingdirectory>
 	<env name="SERVER_PORT" value="9000"/>
+	<env name="SMTP_HOST" value=""/> <!-- -->
+	<env name="SMTP_PORT" value=""/> <!-- -->
 	<env name="DB_ORACLE_JPA_DIALECT" value="org.hibernate.dialect.OracleDialect"/>
 	<env name="DB_ORACLE_HOST" value="localhost"/>
 	<env name="DB_ORACLE_PORT" value="1521"/> 
