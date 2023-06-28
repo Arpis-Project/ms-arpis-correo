@@ -34,7 +34,7 @@ public class ProveedorAutenticacion implements AuthenticationProvider {
 				return null;
 			}
 			if (usuario.get().getPassword().equals(pass)) {
-				log.info("Sesión iniciada para {}", authentication.getName());
+				log.debug("Sesión iniciada para {}", authentication.getName());
 				return new UsernamePasswordAuthenticationToken(usuario.get().getLogin(), authentication.getCredentials(),
 						new ArrayList<>());
 			}

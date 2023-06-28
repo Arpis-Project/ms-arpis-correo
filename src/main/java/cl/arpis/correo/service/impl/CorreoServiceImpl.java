@@ -19,6 +19,7 @@ import cl.arpis.correo.persistence.clientes.samsonite.repositories.TemplateRepos
 import cl.arpis.correo.persistence.general.custom.CorreosRepository;
 import cl.arpis.correo.service.CorreoService;
 import cl.arpis.correo.service.EmailService;
+import cl.arpis.correo.util.JsonUtils;
 import cl.arpis.correo.util.MapperUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,6 +41,7 @@ public class CorreoServiceImpl implements CorreoService {
 
 	@Override
 	public RespuestaDto enviarCorreo(final MensajeDto correo) {
+		log.debug(JsonUtils.objectToJsonString(correo));
 		ContenedorCorreoDto contCorreo = null;
 		if(ObjectUtils.isEmpty(correo.getCodError())) {
 			contCorreo = buscarCorreos(correo.getProyecto(), correo.getIdEtapa());
