@@ -1,4 +1,4 @@
-package cl.arpis.correo.service.impl;
+package cl.arpis.correo.dto;
 
 import java.io.Serializable;
 import java.util.List;

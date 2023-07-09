@@ -17,6 +17,7 @@ import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.Context;
 
 import cl.arpis.correo.dto.ContenedorCorreoDto;
+import cl.arpis.correo.dto.CorreosEnvioDTO;
 import cl.arpis.correo.dto.MensajeDto;
 import cl.arpis.correo.dto.MensajeEmailDto;
 import cl.arpis.correo.dto.datos.CorreoDto;
@@ -57,9 +58,11 @@ public class EmailServiceImpl implements EmailService {
 			final ContenedorCorreoDto contCorreos) {
 		// Obtener casillas
 		final CorreosEnvioDTO envio = this.clasificarCorreos(correo, contCorreos, mensaje);
-		// Obtener template
-		final Optional<TemplateEntity> template = this.templateRepository.findById(envio.getIdTemplate());
-		if(template.isPresent()) {
+		if(!ObjectUtils.isEmpty(correo.getContieneTemplate()) && correo.getContieneTemplate()) {
+			this.enviarConTemplate(envio, correo, mensaje);
+		} else if(!ObjectUtils.isEmpty(envio.getIdTemplate())) {
+			// Obtener template
+			final Optional<TemplateEntity> template = this.templateRepository.findById(envio.getIdTemplate());
 			this.enviarConTemplate(envio, correo, mensaje, template.get());
 		} else {
 			this.enviarSinTemplate(envio, correo, mensaje);
@@ -180,6 +183,35 @@ public class EmailServiceImpl implements EmailService {
 			contexto.setVariable("nombre_destinatario", envio.getReceptores().stream().findFirst().get().getNombre());
 			// Generar HTML
 			mimeMessageHelper.setText(this.templateEngine.process(template.getContenido(), contexto), true);
+			// Enviar correo
+			mailSender.send(emailMessage);
+		} catch (MessagingException e) {
+			throw new ArpisException("", e);
+		}
+	}
+
+	private void enviarConTemplate(final CorreosEnvioDTO envio, final MensajeDto correo, final MensajeEmailDto mensaje) {
+		// Configuracion SMTP
+		final JavaMailSender mailSender = this.crearSender(envio.getServicio());
+		final MimeMessage emailMessage = mailSender.createMimeMessage();
+		try {
+			MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(emailMessage,
+					MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+			mimeMessageHelper.setSubject(correo.getAsunto());
+			mimeMessageHelper.setFrom(envio.getEmisor().getEmail());
+			mimeMessageHelper.setTo(envio.getReceptores().stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
+			// CC
+			if(!envio.getReceptoresCC().isEmpty()) {
+				mimeMessageHelper.setCc(envio.getReceptoresCC().stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
+			}
+			// CCO
+			if(!envio.getReceptoresCCO().isEmpty()) {
+				mimeMessageHelper.setBcc(envio.getReceptoresCCO().stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
+			}
+			// Configurar template
+			final Context contexto = new Context();
+			// Generar HTML
+			mimeMessageHelper.setText(this.templateEngine.process(correo.getContenido(), contexto), true);
 			// Enviar correo
 			mailSender.send(emailMessage);
 		} catch (MessagingException e) {

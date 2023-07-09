@@ -37,8 +37,8 @@ public class MensajeDto implements Serializable {
 	@NotEmpty
 	@Size(max = 200)
 	private String asunto;
-	@Size(max = 500)
 	private String contenido;
+	private Boolean contieneTemplate;
 	private Short codError;
 	private List<CasosDto> listaCasos;
 
