@@ -31,8 +31,9 @@ public class MensajeDto implements Serializable {
 	private Integer proyecto;
 	@NotNull
 	private Long idEtapa;
-	@NotNull
-	private Integer storeNo;
+	@NotEmpty
+	@Size(min = 1)
+	private List<Integer> storeNumbers;
 	@NotEmpty
 	@Size(max = 200)
 	private String asunto;

@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
@@ -85,8 +86,11 @@ public class EmailServiceImpl implements EmailService {
 		}
 		final List<CorreoDto> receptores = contCorreos.getListaCorreo().stream()
 				.filter(c -> TipoCorreoEnum.PARA.equals(c.getTipoCorreo().getNombre()))
-				.filter(c -> c.getNumeroTienda().equals(correo.getStoreNo()))
-				.map(c -> c.getCorreo())
+				.filter(c -> correo.getStoreNumbers().contains(c.getNumeroTienda()))
+				.map(c -> c.getCorreo()) // Obtener datos correos
+				.collect(Collectors.groupingBy(CorreoDto::getEmail)) // Agruparlos por email
+				.entrySet().stream() // Obtener agrupaciones
+				.map(es -> es.getValue().stream().findFirst().get()) // Sacar el primer correo disponible
 				.toList();
 		if(receptores.isEmpty()) {
 			log.error(String.format("Correo sin receptores: Mensaje %s", mensaje.toString()));
@@ -94,13 +98,19 @@ public class EmailServiceImpl implements EmailService {
 		}
 		final List<CorreoDto> receptoresCC = contCorreos.getListaCorreo().stream()
 				.filter(c -> TipoCorreoEnum.CC.equals(c.getTipoCorreo().getNombre()))
-				.filter(c -> c.getNumeroTienda().equals(correo.getStoreNo()))
-				.map(c -> c.getCorreo())
+				.filter(c -> correo.getStoreNumbers().contains(c.getNumeroTienda()))
+				.map(c -> c.getCorreo()) // Obtener datos correos
+				.collect(Collectors.groupingBy(CorreoDto::getEmail)) // Agruparlos por email
+				.entrySet().stream() // Obtener agrupaciones
+				.map(es -> es.getValue().stream().findFirst().get()) // Sacar el primer correo disponible
 				.toList();
 		final List<CorreoDto> receptoresCCO = contCorreos.getListaCorreo().stream()
 				.filter(c -> TipoCorreoEnum.CCO.equals(c.getTipoCorreo().getNombre()))
-				.filter(c -> c.getNumeroTienda().equals(correo.getStoreNo()))
-				.map(c -> c.getCorreo())
+				.filter(c -> correo.getStoreNumbers().contains(c.getNumeroTienda()))
+				.map(c -> c.getCorreo()) // Obtener datos correos
+				.collect(Collectors.groupingBy(CorreoDto::getEmail)) // Agruparlos por email
+				.entrySet().stream() // Obtener agrupaciones
+				.map(es -> es.getValue().stream().findFirst().get()) // Sacar el primer correo disponible
 				.toList();
 		return CorreosEnvioDTO.builder()
 				.idTemplate(contCorreos.getListaCorreo().stream()
