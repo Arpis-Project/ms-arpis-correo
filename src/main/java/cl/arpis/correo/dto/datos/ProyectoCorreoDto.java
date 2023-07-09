@@ -36,6 +36,7 @@ public class ProyectoCorreoDto implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date fechaCreacion;
 	private Integer idTemplate;
+	private Integer numeroTienda;
 	private EtapaProyectoDto etapa;
 	private CorreoDto correo;
 	private TipoCorreoDto tipoCorreo;

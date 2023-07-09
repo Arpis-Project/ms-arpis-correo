@@ -36,6 +36,9 @@ public class ProyectoCorreoEntity {
 	@Column(name = "ID_TEMPLATE")
 	private Integer idTemplate;
 
+	@Column(name = "STORE_NO")
+	private Integer numeroTienda;
+
 	@ManyToOne
 	@JoinColumn(name = "ID_ETAPA_PROYECTO", nullable = false, updatable = true, insertable = true)
 	private EtapaProyectoEntity etapa;

@@ -55,7 +55,7 @@ public class EmailServiceImpl implements EmailService {
 	public void enviarEmail(final MensajeDto correo, final MensajeEmailDto mensaje,
 			final ContenedorCorreoDto contCorreos) {
 		// Obtener casillas
-		final CorreosEnvioDTO envio = this.clasificarCorreos(contCorreos, mensaje);
+		final CorreosEnvioDTO envio = this.clasificarCorreos(correo, contCorreos, mensaje);
 		// Obtener template
 		final Optional<TemplateEntity> template = this.templateRepository.findById(envio.getIdTemplate());
 		if(template.isPresent()) {
@@ -65,7 +65,7 @@ public class EmailServiceImpl implements EmailService {
 		}
 	}
 
-	private CorreosEnvioDTO clasificarCorreos(final ContenedorCorreoDto contCorreos,
+	private CorreosEnvioDTO clasificarCorreos(final MensajeDto correo, final ContenedorCorreoDto contCorreos,
 			final MensajeEmailDto mensaje) {
 		final Optional<CorreoDto> servicio = contCorreos.getListaCorreo().stream()
 				.filter(c -> TipoCorreoEnum.SERVICIO.equals(c.getTipoCorreo().getNombre()))
@@ -85,6 +85,7 @@ public class EmailServiceImpl implements EmailService {
 		}
 		final List<CorreoDto> receptores = contCorreos.getListaCorreo().stream()
 				.filter(c -> TipoCorreoEnum.PARA.equals(c.getTipoCorreo().getNombre()))
+				.filter(c -> c.getNumeroTienda().equals(correo.getStoreNo()))
 				.map(c -> c.getCorreo())
 				.toList();
 		if(receptores.isEmpty()) {
@@ -93,10 +94,12 @@ public class EmailServiceImpl implements EmailService {
 		}
 		final List<CorreoDto> receptoresCC = contCorreos.getListaCorreo().stream()
 				.filter(c -> TipoCorreoEnum.CC.equals(c.getTipoCorreo().getNombre()))
+				.filter(c -> c.getNumeroTienda().equals(correo.getStoreNo()))
 				.map(c -> c.getCorreo())
 				.toList();
 		final List<CorreoDto> receptoresCCO = contCorreos.getListaCorreo().stream()
 				.filter(c -> TipoCorreoEnum.CCO.equals(c.getTipoCorreo().getNombre()))
+				.filter(c -> c.getNumeroTienda().equals(correo.getStoreNo()))
 				.map(c -> c.getCorreo())
 				.toList();
 		return CorreosEnvioDTO.builder()
