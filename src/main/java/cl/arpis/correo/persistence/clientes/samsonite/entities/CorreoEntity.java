@@ -35,7 +35,7 @@ public class CorreoEntity {
 	private String nombre;
 
 	@Column(name = "PASSWORD")
-	private String pasword;
+	private String password;
 
 	@Column(name = "ACTIVO", nullable = false)
 	@Enumerated(EnumType.STRING)

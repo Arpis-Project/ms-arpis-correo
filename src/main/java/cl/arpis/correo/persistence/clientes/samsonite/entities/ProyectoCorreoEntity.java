@@ -51,4 +51,8 @@ public class ProyectoCorreoEntity {
 	@JoinColumn(name = "ID_TIPO_CORREO", nullable = false, updatable = true, insertable = true)
 	private TipoCorreoEntity tipoCorreo;
 
+	@ManyToOne
+	@JoinColumn(name = "ID_TIPO_RECEPTOR", nullable = false, updatable = true, insertable = true)
+	private TipoReceptorEntity tipoReceptor;
+
 }

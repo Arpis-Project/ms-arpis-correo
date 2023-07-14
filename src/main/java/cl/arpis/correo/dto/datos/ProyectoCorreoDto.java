@@ -40,5 +40,6 @@ public class ProyectoCorreoDto implements Serializable {
 	private EtapaProyectoDto etapa;
 	private CorreoDto correo;
 	private TipoCorreoDto tipoCorreo;
+	private TipoReceptorDto tipoReceptor;
 
 }

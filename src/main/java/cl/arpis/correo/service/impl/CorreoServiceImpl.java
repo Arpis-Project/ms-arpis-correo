@@ -81,6 +81,7 @@ public class CorreoServiceImpl implements CorreoService {
 			.filter(d -> ActivoEnum.S.equals(d.getEtapa().getActivo()))
 			.filter(d -> ActivoEnum.S.equals(d.getEtapa().getProyecto().getActivo()))
 			.filter(d -> ActivoEnum.S.equals(d.getTipoCorreo().getActivo()))
+			.filter(d -> ObjectUtils.isEmpty(d.getTipoReceptor()) ||  ActivoEnum.S.equals(d.getTipoReceptor().getActivo()))
 			.toList();
 		if(listaDatos.isEmpty()) {
 			log.error(String.format("Sin correos para proyecto: %s", idProyecto));

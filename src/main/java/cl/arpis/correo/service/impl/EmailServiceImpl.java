@@ -90,6 +90,8 @@ public class EmailServiceImpl implements EmailService {
 		final List<CorreoDto> receptores = contCorreos.getListaCorreo().stream()
 				.filter(c -> TipoCorreoEnum.PARA.equals(c.getTipoCorreo().getNombre()))
 				.filter(c -> correo.getStoreNumbers().contains(c.getNumeroTienda()))
+				.peek(c -> c.getCorreo().setTipoReceptorDescripcion(ObjectUtils.isEmpty(c.getTipoReceptor())
+						? null : c.getTipoReceptor().getDescripcion()))
 				.map(c -> c.getCorreo()) // Obtener datos correos
 				.collect(Collectors.groupingBy(CorreoDto::getEmail)) // Agruparlos por email
 				.entrySet().stream() // Obtener agrupaciones
@@ -180,7 +182,11 @@ public class EmailServiceImpl implements EmailService {
 			if(!ObjectUtils.isEmpty(correo.getContenido())) {
 				contexto.setVariable("contenido", correo.getContenido());
 			}
-			contexto.setVariable("nombre_destinatario", envio.getReceptores().stream().findFirst().get().getNombre());
+			if(ObjectUtils.isEmpty(envio.getReceptores().stream().findFirst().get().getTipoReceptorDescripcion())) {
+				contexto.setVariable("nombre_destinatario", envio.getReceptores().stream().findFirst().get().getNombre());
+			} else {
+				contexto.setVariable("nombre_destinatario", envio.getReceptores().stream().findFirst().get().getTipoReceptorDescripcion());
+			}
 			// Generar HTML
 			mimeMessageHelper.setText(this.templateEngine.process(template.getContenido(), contexto), true);
 			// Enviar correo
@@ -208,10 +214,8 @@ public class EmailServiceImpl implements EmailService {
 			if(!envio.getReceptoresCCO().isEmpty()) {
 				mimeMessageHelper.setBcc(envio.getReceptoresCCO().stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
 			}
-			// Configurar template
-			final Context contexto = new Context();
 			// Generar HTML
-			mimeMessageHelper.setText(this.templateEngine.process(correo.getContenido(), contexto), true);
+			mimeMessageHelper.setText(correo.getContenido(), true);
 			// Enviar correo
 			mailSender.send(emailMessage);
 		} catch (MessagingException e) {
@@ -222,7 +226,7 @@ public class EmailServiceImpl implements EmailService {
 	private JavaMailSender crearSender(final CorreoDto servicio) {
 		final JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		mailSender.setUsername(servicio.getEmail());
-		mailSender.setPassword(servicio.getPasword());
+		mailSender.setPassword(servicio.getPassword());
 		mailSender.setHost(this.env.getProperty("arpis.mail.smtp.host"));
 		mailSender.setPort(Integer.valueOf(this.env.getProperty("arpis.mail.smtp.port")));
 		mailSender.setProtocol(this.env.getProperty("arpis.mail.transport.protocol"));
