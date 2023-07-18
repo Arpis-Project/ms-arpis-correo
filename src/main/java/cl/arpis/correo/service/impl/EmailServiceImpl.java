@@ -28,6 +28,7 @@ import cl.arpis.correo.persistence.clientes.samsonite.entities.TemplateEntity;
 import cl.arpis.correo.persistence.clientes.samsonite.repositories.TemplateRepository;
 import cl.arpis.correo.service.EmailService;
 import cl.arpis.correo.util.DateUtils;
+import cl.arpis.correo.util.JsonUtils;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -58,6 +59,7 @@ public class EmailServiceImpl implements EmailService {
 			final ContenedorCorreoDto contCorreos) {
 		// Obtener casillas
 		final CorreosEnvioDTO envio = this.clasificarCorreos(correo, contCorreos, mensaje);
+		log.info("Config correo a enviar: {}", JsonUtils.objectToJsonString(envio));
 		if(!ObjectUtils.isEmpty(correo.getContieneTemplate()) && correo.getContieneTemplate()) {
 			this.enviarConTemplate(envio, correo, mensaje);
 		} else if(!ObjectUtils.isEmpty(envio.getIdTemplate())) {
@@ -129,6 +131,7 @@ public class EmailServiceImpl implements EmailService {
 	}
 
 	private void enviarSinTemplate(final CorreosEnvioDTO envio, final MensajeDto correo, final MensajeEmailDto mensaje) {
+		log.info("Enviando sin template: Asunto \"{}\"", correo.getAsunto());
 		/*
 		 * Crear mensaje
 		 */
@@ -155,6 +158,7 @@ public class EmailServiceImpl implements EmailService {
 
 	private void enviarConTemplate(final CorreosEnvioDTO envio, final MensajeDto correo, final MensajeEmailDto mensaje,
 			final TemplateEntity template) {
+		log.info("Enviando con template: Asunto \"{}\"", correo.getAsunto());
 		// Configuracion SMTP
 		final JavaMailSender mailSender = this.crearSender(envio.getServicio());
 		final MimeMessage emailMessage = mailSender.createMimeMessage();
@@ -197,6 +201,7 @@ public class EmailServiceImpl implements EmailService {
 	}
 
 	private void enviarConTemplate(final CorreosEnvioDTO envio, final MensajeDto correo, final MensajeEmailDto mensaje) {
+		log.info("Enviando con template desde entrada: Asunto \"{}\"", correo.getAsunto());
 		// Configuracion SMTP
 		final JavaMailSender mailSender = this.crearSender(envio.getServicio());
 		final MimeMessage emailMessage = mailSender.createMimeMessage();
