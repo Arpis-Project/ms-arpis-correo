@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import cl.arpis.correo.dto.datos.ProyectoCorreoDto;
 import cl.arpis.correo.dto.datos.ProyectoErrorDto;
 import cl.arpis.correo.dto.datos.UsuarioDto;
+import cl.arpis.correo.estructuras.RegistroCorreo;
 import cl.arpis.correo.persistence.clientes.fuenzalida.entities.ProyectoCorreoEntity;
 import cl.arpis.correo.persistence.clientes.fuenzalida.entities.ProyectoErrorEntity;
 import cl.arpis.correo.persistence.clientes.fuenzalida.entities.UsuarioEntity;
@@ -71,6 +72,12 @@ public class FuenzalidaCorreosRepositoryImpl implements CorreosRepository {
 
 	@Override
 	public List<ProyectoCorreoDto> obtenerProyectoCorreo(Integer idProyecto, Long idEtapa) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RegistroCorreo registrarEventoCorreo(RegistroCorreo registro) {
 		// TODO Auto-generated method stub
 		return null;
 	}

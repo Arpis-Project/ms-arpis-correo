@@ -21,15 +21,17 @@ import cl.arpis.correo.dto.CorreosEnvioDTO;
 import cl.arpis.correo.dto.MensajeDto;
 import cl.arpis.correo.dto.MensajeEmailDto;
 import cl.arpis.correo.dto.datos.CorreoDto;
+import cl.arpis.correo.enums.EstadoRegistroEnum;
 import cl.arpis.correo.enums.TipoCorreoEnum;
+import cl.arpis.correo.estructuras.RegistroCorreo;
 import cl.arpis.correo.exceptions.ArpisException;
 import cl.arpis.correo.exceptions.CorreoException;
 import cl.arpis.correo.persistence.clientes.samsonite.entities.TemplateEntity;
 import cl.arpis.correo.persistence.clientes.samsonite.repositories.TemplateRepository;
+import cl.arpis.correo.persistence.general.custom.CorreosRepository;
 import cl.arpis.correo.service.EmailService;
 import cl.arpis.correo.util.DateUtils;
 import cl.arpis.correo.util.JsonUtils;
-import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,13 +42,16 @@ public class EmailServiceImpl implements EmailService {
 	private Environment env;
 	private TemplateRepository templateRepository;
 	private ITemplateEngine templateEngine;
+	private CorreosRepository correoRepository;
 
 	public EmailServiceImpl(Environment env,
 			TemplateRepository templateRepository,
-			ITemplateEngine templateEngine) {
+			ITemplateEngine templateEngine,
+			CorreosRepository correoRepository) {
 		this.env = env;
 		this.templateRepository = templateRepository;
 		this.templateEngine = templateEngine;
+		this.correoRepository = correoRepository;
 	}
 
 	@Override
@@ -60,14 +65,16 @@ public class EmailServiceImpl implements EmailService {
 		// Obtener casillas
 		final CorreosEnvioDTO envio = this.clasificarCorreos(correo, contCorreos, mensaje);
 		log.info("Config correo a enviar: {}", JsonUtils.objectToJsonString(envio));
+		// Para algunos casos, se registra el envio del correo
+		final Optional<RegistroCorreo> registro = this.registrarCorreo(correo, envio, contCorreos); 
 		if(!ObjectUtils.isEmpty(correo.getContieneTemplate()) && correo.getContieneTemplate()) {
-			this.enviarConTemplate(envio, correo, mensaje);
+			this.enviarConTemplate(envio, correo, mensaje, registro);
 		} else if(!ObjectUtils.isEmpty(envio.getIdTemplate())) {
 			// Obtener template
 			final Optional<TemplateEntity> template = this.templateRepository.findById(envio.getIdTemplate());
-			this.enviarConTemplate(envio, correo, mensaje, template.get());
+			this.enviarConTemplate(envio, correo, mensaje, template.get(), registro);
 		} else {
-			this.enviarSinTemplate(envio, correo, mensaje);
+			this.enviarSinTemplate(envio, correo, mensaje, registro);
 		}
 	}
 
@@ -130,34 +137,48 @@ public class EmailServiceImpl implements EmailService {
 				.build();
 	}
 
-	private void enviarSinTemplate(final CorreosEnvioDTO envio, final MensajeDto correo, final MensajeEmailDto mensaje) {
+	private void enviarSinTemplate(final CorreosEnvioDTO envio, final MensajeDto correo, final MensajeEmailDto mensaje,
+			final Optional<RegistroCorreo> registro) {
 		log.info("Enviando sin template: Asunto \"{}\"", correo.getAsunto());
-		/*
-		 * Crear mensaje
-		 */
-		final SimpleMailMessage emailMessage = new SimpleMailMessage();
-		// FROM
-		emailMessage.setFrom(envio.getEmisor().getEmail());
-		// TO
-		emailMessage.setTo(envio.getReceptores().stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
-		// CC
-		if(!envio.getReceptoresCC().isEmpty()) {
-			emailMessage.setCc(envio.getReceptoresCC().stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
+		try {
+			/*
+			 * Crear mensaje
+			 */
+			final SimpleMailMessage emailMessage = new SimpleMailMessage();
+			// FROM
+			emailMessage.setFrom(envio.getEmisor().getEmail());
+			// TO
+			emailMessage.setTo(envio.getReceptores().stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
+			// CC
+			if(!envio.getReceptoresCC().isEmpty()) {
+				emailMessage.setCc(envio.getReceptoresCC().stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
+			}
+			// CCO
+			if(!envio.getReceptoresCCO().isEmpty()) {
+				emailMessage.setBcc(envio.getReceptoresCCO().stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
+			}
+			emailMessage.setSubject(correo.getAsunto());
+			emailMessage.setText(String.format("%s\n%s", correo.getContenido(), mensaje.getMensaje()));
+			// Configuracion SMTP
+			final JavaMailSender mailSender = this.crearSender(envio.getServicio());
+			// Enviar correo
+			mailSender.send(emailMessage);
+		} catch (Throwable e) {
+			if(registro.isPresent()) {
+				registro.get().setEstado(EstadoRegistroEnum.ERROR);
+				registro.get().setDetalle(e.getMessage());
+				this.registrarCorreo(registro.get());
+			}
+			throw new ArpisException("", e);
 		}
-		// CCO
-		if(!envio.getReceptoresCCO().isEmpty()) {
-			emailMessage.setBcc(envio.getReceptoresCCO().stream().map(r -> r.getEmail()).toList().toArray(new String[0]));
+		if(registro.isPresent()) {
+			registro.get().setEstado(EstadoRegistroEnum.OK);
+			this.registrarCorreo(registro.get());
 		}
-		emailMessage.setSubject(correo.getAsunto());
-		emailMessage.setText(String.format("%s\n%s", correo.getContenido(), mensaje.getMensaje()));
-		// Configuracion SMTP
-		final JavaMailSender mailSender = this.crearSender(envio.getServicio());
-		// Enviar correo
-		mailSender.send(emailMessage);
 	}
 
 	private void enviarConTemplate(final CorreosEnvioDTO envio, final MensajeDto correo, final MensajeEmailDto mensaje,
-			final TemplateEntity template) {
+			final TemplateEntity template, final Optional<RegistroCorreo> registro) {
 		log.info("Enviando con template: Asunto \"{}\"", correo.getAsunto());
 		// Configuracion SMTP
 		final JavaMailSender mailSender = this.crearSender(envio.getServicio());
@@ -195,12 +216,22 @@ public class EmailServiceImpl implements EmailService {
 			mimeMessageHelper.setText(this.templateEngine.process(template.getContenido(), contexto), true);
 			// Enviar correo
 			mailSender.send(emailMessage);
-		} catch (MessagingException e) {
+		} catch (Throwable e) {
+			if(registro.isPresent()) {
+				registro.get().setEstado(EstadoRegistroEnum.ERROR);
+				registro.get().setDetalle(e.getMessage());
+				this.registrarCorreo(registro.get());
+			}
 			throw new ArpisException("", e);
+		}
+		if(registro.isPresent()) {
+			registro.get().setEstado(EstadoRegistroEnum.OK);
+			this.registrarCorreo(registro.get());
 		}
 	}
 
-	private void enviarConTemplate(final CorreosEnvioDTO envio, final MensajeDto correo, final MensajeEmailDto mensaje) {
+	private void enviarConTemplate(final CorreosEnvioDTO envio, final MensajeDto correo, final MensajeEmailDto mensaje,
+			final Optional<RegistroCorreo> registro) {
 		log.info("Enviando con template desde entrada: Asunto \"{}\"", correo.getAsunto());
 		// Configuracion SMTP
 		final JavaMailSender mailSender = this.crearSender(envio.getServicio());
@@ -223,8 +254,17 @@ public class EmailServiceImpl implements EmailService {
 			mimeMessageHelper.setText(correo.getContenido(), true);
 			// Enviar correo
 			mailSender.send(emailMessage);
-		} catch (MessagingException e) {
+		} catch (Throwable e) {
+			if(registro.isPresent()) {
+				registro.get().setEstado(EstadoRegistroEnum.ERROR);
+				registro.get().setDetalle(e.getMessage());
+				this.registrarCorreo(registro.get());
+			}
 			throw new ArpisException("", e);
+		}
+		if(registro.isPresent()) {
+			registro.get().setEstado(EstadoRegistroEnum.OK);
+			this.registrarCorreo(registro.get());
 		}
 	}
 
@@ -242,6 +282,25 @@ public class EmailServiceImpl implements EmailService {
 		props.put("mail.debug", this.env.getProperty("arpis.mail.debug"));
 		props.put("mail.encoding", this.env.getProperty("arpis.mail.encoding"));
 		return mailSender;
+	}
+
+	private Optional<RegistroCorreo> registrarCorreo(final MensajeDto correo, final CorreosEnvioDTO envio,
+			final ContenedorCorreoDto contCorreos) {
+		if(1 > contCorreos.getListaCorreo().stream()
+			.filter(c -> "Diferencias".equals(c.getEtapa().getNombre()))
+			.count()) {
+			return Optional.empty();
+		}
+		return Optional.of(this.correoRepository.registrarEventoCorreo(RegistroCorreo.builder()
+				.destinatarios(envio.getReceptores().stream().map(r -> r.getEmail()).toList().toString())
+				.conCopia(envio.getReceptoresCC().stream().map(r -> r.getEmail()).toList().toString())
+				.contenido(correo.getContenido())
+				.estado(EstadoRegistroEnum.EN_PROCESO)
+				.build()));
+	}
+
+	private RegistroCorreo registrarCorreo(final RegistroCorreo registro) {
+		return this.correoRepository.registrarEventoCorreo(registro);
 	}
 
 }
