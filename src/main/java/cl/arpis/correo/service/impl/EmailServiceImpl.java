@@ -292,6 +292,7 @@ public class EmailServiceImpl implements EmailService {
 			return Optional.empty();
 		}
 		return Optional.of(this.correoRepository.registrarEventoCorreo(RegistroCorreo.builder()
+				.asunto(ObjectUtils.isEmpty(correo.getAsunto()) ? "" : correo.getAsunto())
 				.destinatarios(envio.getReceptores().stream().map(r -> r.getEmail()).toList().toString())
 				.conCopia(envio.getReceptoresCC().stream().map(r -> r.getEmail()).toList().toString())
 				.contenido(correo.getContenido())

@@ -36,6 +36,9 @@ public class RegistroEntity {
 	@UpdateTimestamp
 	private Date fechaMensaje;
 
+	@Column(name = "ASUNTO", nullable = false)
+	private String asunto;
+
 	@Column(name = "DESTINATARIOS", nullable = false)
 	private String destinatarios;
 

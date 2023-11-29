@@ -21,6 +21,7 @@ public class RegistroCorreo {
 
 	private Integer id;
 	private Date fechaMensaje;
+	private String asunto;
 	private String destinatarios;
 	private String conCopia;
 	private String contenido;
