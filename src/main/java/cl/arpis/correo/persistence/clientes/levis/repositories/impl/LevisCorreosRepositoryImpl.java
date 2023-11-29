@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import cl.arpis.correo.dto.datos.ProyectoCorreoDto;
 import cl.arpis.correo.dto.datos.ProyectoErrorDto;
 import cl.arpis.correo.dto.datos.UsuarioDto;
+import cl.arpis.correo.estructuras.RegistroCorreo;
 import cl.arpis.correo.persistence.general.custom.CorreosRepository;
 
 /**
@@ -42,6 +43,12 @@ public class LevisCorreosRepositoryImpl implements CorreosRepository {
 
 	@Override
 	public List<ProyectoErrorDto> obtenerProyectoErrorPorTipo(Integer idProyecto, Short idTipoError) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RegistroCorreo registrarEventoCorreo(RegistroCorreo registro) {
 		// TODO Auto-generated method stub
 		return null;
 	}

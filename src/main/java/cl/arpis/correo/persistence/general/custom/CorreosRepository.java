@@ -6,6 +6,7 @@ import java.util.Optional;
 import cl.arpis.correo.dto.datos.ProyectoCorreoDto;
 import cl.arpis.correo.dto.datos.ProyectoErrorDto;
 import cl.arpis.correo.dto.datos.UsuarioDto;
+import cl.arpis.correo.estructuras.RegistroCorreo;
 
 /**
  * 
@@ -20,6 +21,8 @@ public interface CorreosRepository {
 	List<ProyectoCorreoDto> obtenerProyectoCorreo(Integer idProyecto);
 
 	List<ProyectoCorreoDto> obtenerProyectoCorreo(Integer idProyecto, Long idEtapa);
+
+	RegistroCorreo registrarEventoCorreo(RegistroCorreo registro);
 
 	@Deprecated
 	List<ProyectoErrorDto> obtenerProyectoErrorPorTipo(Integer idProyecto, Short idTipoError);

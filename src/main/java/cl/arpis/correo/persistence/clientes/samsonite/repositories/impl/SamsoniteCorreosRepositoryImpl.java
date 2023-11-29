@@ -11,11 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 import cl.arpis.correo.dto.datos.ProyectoCorreoDto;
 import cl.arpis.correo.dto.datos.ProyectoErrorDto;
 import cl.arpis.correo.dto.datos.UsuarioDto;
+import cl.arpis.correo.estructuras.RegistroCorreo;
 import cl.arpis.correo.persistence.clientes.samsonite.entities.ProyectoCorreoEntity;
 import cl.arpis.correo.persistence.clientes.samsonite.entities.ProyectoErrorEntity;
+import cl.arpis.correo.persistence.clientes.samsonite.entities.RegistroEntity;
 import cl.arpis.correo.persistence.clientes.samsonite.entities.UsuarioEntity;
 import cl.arpis.correo.persistence.clientes.samsonite.repositories.ProyectoCorreoRepository;
 import cl.arpis.correo.persistence.clientes.samsonite.repositories.ProyectoErrorRepository;
+import cl.arpis.correo.persistence.clientes.samsonite.repositories.RegistroRepository;
 import cl.arpis.correo.persistence.clientes.samsonite.repositories.UsuarioRepository;
 import cl.arpis.correo.persistence.general.custom.CorreosRepository;
 import cl.arpis.correo.util.MapperUtils;
@@ -32,14 +35,17 @@ public class SamsoniteCorreosRepositoryImpl implements CorreosRepository {
 
 	private UsuarioRepository usuariosRepository;
 	private ProyectoCorreoRepository proyectoCorreoRepository;
+	private RegistroRepository registroRepository;
 	@Deprecated
 	private ProyectoErrorRepository proyectoErrorRepository;
 
 	public SamsoniteCorreosRepositoryImpl(UsuarioRepository usuariosRepository,
 			ProyectoCorreoRepository proyectoCorreoRepository,
+			RegistroRepository registroRepository,
 			ProyectoErrorRepository proyectoErrorRepository) {
 		this.usuariosRepository = usuariosRepository;
 		this.proyectoCorreoRepository = proyectoCorreoRepository;
+		this.registroRepository = registroRepository;
 		this.proyectoErrorRepository = proyectoErrorRepository;
 	}
 
@@ -69,6 +75,12 @@ public class SamsoniteCorreosRepositoryImpl implements CorreosRepository {
 			return new ArrayList<>();
 		}
 		return MapperUtils.listToList(proyectoInfo, ProyectoCorreoDto.class);
+	}
+
+	@Override
+	public RegistroCorreo registrarEventoCorreo(final RegistroCorreo registro) {
+		return MapperUtils.objectToObject(this.registroRepository.save(MapperUtils.objectToObject(
+				registro, RegistroEntity.class)), RegistroCorreo.class);
 	}
 
 	@Override
